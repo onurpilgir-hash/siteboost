@@ -3,17 +3,18 @@ import {
   Document, Page, Text, View, StyleSheet, Font,
 } from '@react-pdf/renderer'
 
+const fontPath = process.platform === 'win32'
+  ? 'C:/Windows/Fonts/'
+  : '/usr/share/fonts/truetype/dejavu/'
+
+const regularFont = process.platform === 'win32' ? 'arial.ttf' : 'DejaVuSans.ttf'
+const boldFont = process.platform === 'win32' ? 'arialbd.ttf' : 'DejaVuSans-Bold.ttf'
+
 Font.register({
   family: 'Roboto',
   fonts: [
-    {
-      src: 'C:/Windows/Fonts/arial.ttf',
-      fontWeight: 'normal',
-    },
-    {
-      src: 'C:/Windows/Fonts/arialbd.ttf',
-      fontWeight: 'bold',
-    },
+    { src: fontPath + regularFont, fontWeight: 'normal' },
+    { src: fontPath + boldFont, fontWeight: 'bold' },
   ],
 })
 
