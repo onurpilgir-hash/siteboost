@@ -1,0 +1,71 @@
+========================================
+SİTEBOOST — WEB TASARIM PROJESİ BAŞLATMA REHBERİ
+========================================
+
+Bu program tarayıcıda çalışır.
+Her seferinde aşağıdaki adımları sırayla yap.
+
+----------------------------------------
+ADIM 1 — VS CODE'U AÇ
+----------------------------------------
+
+1. VS Code'u aç
+2. Sol üstten: Dosya → Klasör Aç
+3. Şu klasörü seç:
+   C:\Users\onurp\Desktop\PROGRAMLAR\web tasarım\siteboost
+4. "Klasörü Seç" de
+
+----------------------------------------
+ADIM 2 — TERMİNALİ AÇ
+----------------------------------------
+
+VS Code içinde:
+1. Üst menüden "Terminal" tıkla
+2. "Yeni Terminal" tıkla
+3. Altta siyah bir alan açılır
+
+----------------------------------------
+ADIM 3 — PROGRAMI BAŞLAT
+----------------------------------------
+
+Terminale şunu yaz ve Enter'a bas:
+
+npm run dev
+
+Ekranda şunu görmelisin:
+"Local: http://localhost:3000"
+
+----------------------------------------
+ADIM 4 — TARAYICIDA AÇ
+----------------------------------------
+
+1. Tarayıcını aç
+2. Adres çubuğuna şunu yaz ve Enter'a bas:
+
+http://localhost:3000
+
+3. Siteboost paneli açılır — kullanmaya başlayabilirsin.
+
+----------------------------------------
+KAPATMAK İSTEDİĞİNDE
+----------------------------------------
+
+1. Tarayıcı sekmesini kapat
+2. VS Code terminalinde Ctrl + C'ye bas
+3. "İşlemi sonlandırmak istiyor musunuz?" sorusuna E yaz ve Enter'a bas
+
+----------------------------------------
+SORUN OLURSA
+----------------------------------------
+
+"npm run dev" çalışmıyorsa önce şunu yaz:
+npm install
+Enter'a bas, bitince tekrar "npm run dev" yaz.
+
+Sayfa açılmıyorsa:
+- http://localhost:3000 yazdığına emin ol
+- Terminalde hata mesajı var mı? Kopyalayıp AI'ya sor.
+
+.env.local dosyası eksikse:
+- Bu dosya olmadan program çalışmaz
+- AI'ya "siteboost .env.local dosyası eksik" de, birlikte kurarız.

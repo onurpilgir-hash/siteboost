@@ -32,6 +32,10 @@ export default function ScanForm() {
 
   const [url, setUrl] = useState('')
   const [companyName, setCompanyName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [manualCity, setManualCity] = useState('İstanbul')
+  const [manualSector, setManualSector] = useState('')
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -67,7 +71,7 @@ export default function ScanForm() {
       const res = await fetch('/api/scan/manual', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, companyName }),
+        body: JSON.stringify({ url, companyName, email, phone, city: manualCity, sector: manualSector }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Analiz başlatılamadı')
@@ -222,6 +226,57 @@ export default function ScanForm() {
                 onChange={e => setCompanyName(e.target.value)}
                 className="input"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  E-posta <span className="text-gray-500">(mail için)</span>
+                </label>
+                <input
+                  type="email"
+                  placeholder="info@firma.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="input"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Telefon <span className="text-gray-500">(opsiyonel)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="0212 000 00 00"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  className="input"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Şehir</label>
+                <select value={manualCity} onChange={e => setManualCity(e.target.value)} className="input">
+                  <option value="İstanbul">İstanbul</option>
+                  <option value="Ankara">Ankara</option>
+                  <option value="İzmir">İzmir</option>
+                  <option value="Bursa">Bursa</option>
+                  <option value="Antalya">Antalya</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Sektör <span className="text-gray-500">(opsiyonel)</span>
+                </label>
+                <select value={manualSector} onChange={e => setManualSector(e.target.value)} className="input">
+                  <option value="">Seç...</option>
+                  {SECTORS.map(s => (
+                    <option key={s.key} value={s.key}>{s.emoji} {s.label}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <button

@@ -4,7 +4,7 @@ import { analyzeSite } from '@/lib/analyzer'
 
 export async function POST(req: NextRequest) {
   try {
-    const { url, companyName } = await req.json()
+    const { url, companyName, email, phone, city, sector } = await req.json()
 
     if (!url) {
       return NextResponse.json({ error: 'URL gerekli' }, { status: 400 })
@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
       .insert({
         name: companyName || domain,
         website: url,
-        city: 'Bilinmiyor',
+        email: email || null,
+        phone: phone || null,
+        city: city || 'Bilinmiyor',
+        sector: sector || null,
         has_website: true,
         pipeline_stage: 'new_lead',
       })
