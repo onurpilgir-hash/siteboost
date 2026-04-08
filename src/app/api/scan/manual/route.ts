@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
 
     if (leadError) throw leadError
 
-    // Arka planda analizi başlat (asenkron)
-    analyzeSite(url, lead.id).catch(console.error)
+    // Analizi bekle (Vercel'de background işlem kesilir)
+    await analyzeSite(url, lead.id)
 
-    return NextResponse.json({ leadId: lead.id, message: 'Analiz başlatıldı' })
+    return NextResponse.json({ leadId: lead.id, message: 'Analiz tamamlandı' })
   } catch (error) {
     console.error('Manuel scan error:', error)
     return NextResponse.json(
