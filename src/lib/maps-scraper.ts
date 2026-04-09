@@ -55,23 +55,25 @@ export async function searchPlaces(
     throw new Error(`Google Maps API hatası: ${data.status} — ${data.error_message || ''}`)
   }
 
-  const places: PlaceResult[] = []
+  interface RawPlace { name: string; formatted_address: string; place_id: string }
+  const results = (data.results as RawPlace[] || []).slice(0, maxResults)
 
-  for (const place of (data.results || []).slice(0, maxResults)) {
-    // Detay bilgisi al (website ve telefon için)
-    const detail = await getPlaceDetail(place.place_id, apiKey)
-
-    places.push({
-      name: place.name,
-      website: detail.website,
-      phone: detail.phone,
-      address: place.formatted_address,
-      city,
-      district,
-      sector,
-      place_id: place.place_id,
+  // Paralel detay çekimi
+  const places = await Promise.all(
+    results.map(async (place: RawPlace) => {
+      const detail = await getPlaceDetail(place.place_id, apiKey)
+      return {
+        name: place.name,
+        website: detail.website,
+        phone: detail.phone,
+        address: place.formatted_address,
+        city,
+        district,
+        sector,
+        place_id: place.place_id,
+      }
     })
-  }
+  )
 
   return places
 }
