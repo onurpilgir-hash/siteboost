@@ -42,7 +42,14 @@ export async function searchPlaces(
   const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${apiKey}&language=tr`
 
   const res = await fetch(searchUrl)
-  const data = await res.json()
+  const text = await res.text()
+
+  let data: { status: string; error_message?: string; results?: unknown[] }
+  try {
+    data = JSON.parse(text)
+  } catch {
+    throw new Error(`Google Maps JSON hatası: ${text.slice(0, 200)}`)
+  }
 
   if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
     throw new Error(`Google Maps API hatası: ${data.status} — ${data.error_message || ''}`)
