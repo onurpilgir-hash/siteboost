@@ -45,6 +45,7 @@ export async function POST(
     const demoUrl = report?.demo_url || undefined
 
     const { subject, html } = buildAnalysisEmail({
+      leadId: lead.id,
       leadName: lead.name,
       website: lead.website,
       score: analysis.score_genel,
@@ -52,7 +53,7 @@ export async function POST(
       pdfUrl,
       demoUrl,
       brandName: process.env.NEXT_PUBLIC_BRAND_NAME || 'SiteBoost',
-      appUrl: process.env.NEXT_PUBLIC_BRAND_DOMAIN || 'siteboost.app',
+      appUrl: process.env.NEXT_PUBLIC_BRAND_DOMAIN || 'siteboost-chi.vercel.app',
     })
 
     await sendEmail({ to: lead.email, subject, html })

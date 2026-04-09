@@ -44,6 +44,7 @@ export async function sendEmail({ to, subject, html, from }: SendEmailOptions) {
 
 // Analiz raporu mail şablonu
 export function buildAnalysisEmail(opts: {
+  leadId: string
   leadName: string
   website: string
   score: number
@@ -121,7 +122,7 @@ export function buildAnalysisEmail(opts: {
       <p style="margin:0 0 12px;font-size:14px;color:#bfdbfe;">
         Sitenizi nasıl iyileştireceğinizi merak mı ediyorsunuz?
       </p>
-      <a href="mailto:${process.env.EMAIL_FROM?.match(/<(.+)>/)?.[1] || 'info@siteboost.app'}?subject=Fiyat Teklifi - ${opts.leadName}"
+      <a href="${opts.appUrl ? `https://${opts.appUrl}` : 'https://siteboost-chi.vercel.app'}/api/price-request/${opts.leadId}"
          style="display:inline-block;background:#ffffff;color:#1d4ed8;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;">
         💡 Fiyat Almak İstiyorum
       </a>
