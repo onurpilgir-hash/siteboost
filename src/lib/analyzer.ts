@@ -246,6 +246,18 @@ export async function analyzeSite(url: string, leadId: string) {
       .update({ pipeline_stage: 'analyzed', latest_report_id: analysis?.id })
       .eq('id', leadId)
 
+    // Demo token üret
+    const demoToken = crypto.randomUUID()
+    const demoExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://siteboost-chi.vercel.app'
+    await supabase.from('reports').insert({
+      lead_id: leadId,
+      analysis_id: analysis?.id,
+      demo_token: demoToken,
+      demo_url: `${appUrl}/demo/${demoToken}`,
+      demo_expires_at: demoExpires,
+    })
+
     return { success: true, score: MOCK_ANALYSIS.score_genel, analysisId: analysis?.id }
   }
 
@@ -340,6 +352,18 @@ export async function analyzeSite(url: string, leadId: string) {
         latest_report_id: analysis?.id,
       })
       .eq('id', leadId)
+
+    // Demo token üret
+    const demoToken = crypto.randomUUID()
+    const demoExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://siteboost-chi.vercel.app'
+    await supabase.from('reports').insert({
+      lead_id: leadId,
+      analysis_id: analysis?.id,
+      demo_token: demoToken,
+      demo_url: `${appUrl}/demo/${demoToken}`,
+      demo_expires_at: demoExpires,
+    })
 
     return { success: true, score: genel, analysisId: analysis?.id }
   } catch (error) {

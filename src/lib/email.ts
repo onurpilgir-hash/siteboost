@@ -111,9 +111,10 @@ export function buildAnalysisEmail(opts: {
       ${opts.demoUrl ? `
       <br>
       <a href="${opts.demoUrl}"
-         style="display:inline-block;background:#0f172a;border:1px solid #334155;color:#94a3b8;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:13px;margin-top:8px;">
-        🖥️ Demo Sitenizi İnceleyin
+         style="display:inline-block;background:#0f3460;border:2px solid #3b82f6;color:#93c5fd;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;margin-top:12px;">
+        🖥️ Ücretsiz Demo Sitenizi Görün
       </a>
+      <p style="margin:8px 0 0;font-size:11px;color:#64748b;">Demo linki 7 gün geçerlidir</p>
       ` : ''}
     </div>
 
