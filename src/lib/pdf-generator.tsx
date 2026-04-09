@@ -5,21 +5,15 @@ import {
 
 import path from 'path'
 
-const isWin = process.platform === 'win32'
-
 Font.register({
   family: 'Roboto',
   fonts: [
     {
-      src: isWin
-        ? 'C:/Windows/Fonts/arial.ttf'
-        : path.join(process.cwd(), 'public/fonts/NotoSans-Regular.ttf'),
+      src: path.join(process.cwd(), 'public/fonts/Arial.ttf'),
       fontWeight: 'normal',
     },
     {
-      src: isWin
-        ? 'C:/Windows/Fonts/arialbd.ttf'
-        : path.join(process.cwd(), 'public/fonts/NotoSans-Regular.ttf'),
+      src: path.join(process.cwd(), 'public/fonts/Arial-Bold.ttf'),
       fontWeight: 'bold',
     },
   ],
