@@ -58,22 +58,21 @@ export async function searchPlaces(
   interface RawPlace { name: string; formatted_address: string; place_id: string }
   const results = (data.results as RawPlace[] || []).slice(0, maxResults)
 
-  // Paralel detay çekimi
-  const places = await Promise.all(
-    results.map(async (place: RawPlace) => {
-      const detail = await getPlaceDetail(place.place_id, apiKey)
-      return {
-        name: place.name,
-        website: detail.website,
-        phone: detail.phone,
-        address: place.formatted_address,
-        city,
-        district,
-        sector,
-        place_id: place.place_id,
-      }
+  // Sıralı detay çekimi (timeout önlemek için)
+  const places: PlaceResult[] = []
+  for (const place of results) {
+    const detail = await getPlaceDetail(place.place_id, apiKey)
+    places.push({
+      name: place.name,
+      website: detail.website,
+      phone: detail.phone,
+      address: place.formatted_address,
+      city,
+      district,
+      sector,
+      place_id: place.place_id,
     })
-  )
+  }
 
   return places
 }

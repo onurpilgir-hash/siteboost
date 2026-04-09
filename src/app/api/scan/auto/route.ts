@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Gerçek: sadece firmaları bul ve kaydet (analiz ayrı)
-    const places = await searchPlaces(city, district === 'TUMU' ? '' : district, sector, 10)
+    const places = await searchPlaces(city, district === 'TUMU' ? '' : district, sector, 5)
 
     let saved = 0
     let skipped = 0
