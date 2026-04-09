@@ -5,7 +5,6 @@ import {
 
 import path from 'path'
 
-// Windows'ta Arial, Linux/Vercel'de public/fonts klasöründeki woff
 const isWin = process.platform === 'win32'
 
 Font.register({
@@ -14,13 +13,13 @@ Font.register({
     {
       src: isWin
         ? 'C:/Windows/Fonts/arial.ttf'
-        : path.join(process.cwd(), 'public/fonts/Roboto-Regular.woff'),
+        : path.join(process.cwd(), 'public/fonts/NotoSans-Regular.ttf'),
       fontWeight: 'normal',
     },
     {
       src: isWin
         ? 'C:/Windows/Fonts/arialbd.ttf'
-        : path.join(process.cwd(), 'public/fonts/Roboto-Bold.woff'),
+        : path.join(process.cwd(), 'public/fonts/NotoSans-Regular.ttf'),
       fontWeight: 'bold',
     },
   ],
