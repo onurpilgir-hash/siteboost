@@ -19,9 +19,8 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (!lead) {
-      // Hepsi bitti
       await supabase.from('scan_jobs').update({ status: 'completed' }).eq('id', jobId)
-      return NextResponse.json({ done: true })
+      return NextResponse.json({ done: true, remaining: 0 })
     }
 
     // Analiz et

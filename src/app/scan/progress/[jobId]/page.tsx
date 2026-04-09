@@ -46,16 +46,22 @@ export default function ScanProgressPage() {
   const runAnalysis = async () => {
     let done = false
     while (!done) {
-      const res = await fetch('/api/scan/analyze-job', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobId }),
-      })
-      const data = await res.json()
-      if (data.analyzed) {
-        setLog(prev => [...prev, `✓ ${data.analyzed}`])
-      }
-      if (data.done || !res.ok) {
+      try {
+        const res = await fetch('/api/scan/analyze-job', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jobId }),
+        })
+        const data = await res.json()
+        if (data.analyzed) {
+          setLog(prev => [...prev, `✓ ${data.analyzed}`])
+        }
+        if (data.done || !res.ok) {
+          done = true
+          setAnalyzing(false)
+          setJob(prev => prev ? { ...prev, status: 'completed' } : prev)
+        }
+      } catch {
         done = true
         setAnalyzing(false)
       }
