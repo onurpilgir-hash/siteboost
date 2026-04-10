@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     let skipped = 0
 
     for (const place of places) {
-      if (!place.website) { skipped++; continue }
+      if (!place.name) { skipped++; continue }
 
       // Daha önce var mı?
       const { data: existing } = await supabase

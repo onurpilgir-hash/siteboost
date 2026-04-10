@@ -55,34 +55,20 @@ export async function searchPlaces(
     throw new Error(`Google Maps API hatası: ${data.status} — ${data.error_message || ''}`)
   }
 
-  interface RawPlace { name: string; formatted_address: string; place_id: string }
+  interface RawPlace { name: string; formatted_address: string; place_id: string; website?: string; formatted_phone_number?: string }
   const results = (data.results as RawPlace[] || []).slice(0, maxResults)
 
-  // Sıralı detay çekimi (timeout önlemek için)
-  const places: PlaceResult[] = []
-  for (const place of results) {
-    const detail = await getPlaceDetail(place.place_id, apiKey)
-    places.push({
-      name: place.name,
-      website: detail.website,
-      phone: detail.phone,
-      address: place.formatted_address,
-      city,
-      district,
-      sector,
-      place_id: place.place_id,
-    })
-  }
+  // Detay çekimi YOK — sadece text search sonuçları (timeout önlemek için)
+  const places: PlaceResult[] = results.map(place => ({
+    name: place.name,
+    website: place.website,
+    phone: place.formatted_phone_number,
+    address: place.formatted_address,
+    city,
+    district,
+    sector,
+    place_id: place.place_id,
+  }))
 
   return places
-}
-
-async function getPlaceDetail(placeId: string, apiKey: string) {
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=website,formatted_phone_number&key=${apiKey}&language=tr`
-  const res = await fetch(url)
-  const data = await res.json()
-  return {
-    website: data.result?.website,
-    phone: data.result?.formatted_phone_number,
-  }
 }
