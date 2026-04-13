@@ -27,6 +27,17 @@ interface DemoData {
 }
 
 const SECTOR_ICONS: Record<string, string> = {
+  'dis_klinigi': '🦷',
+  'restoran': '🍽️',
+  'avukat': '⚖️',
+  'guzellik_salonu': '💅',
+  'insaat': '🏗️',
+  'oto_galeri': '🚗',
+  'otel': '🏨',
+  'veteriner': '🐾',
+  'muhasebe': '📊',
+  'saglik': '🏥',
+  // label fallback
   'Diş Kliniği': '🦷',
   'Restoran': '🍽️',
   'Avukat': '⚖️',
@@ -238,25 +249,90 @@ export default function DemoPage() {
 
 function getSectorServices(sector: string) {
   const map: Record<string, { icon: string; name: string; desc: string }[]> = {
-    'Diş Kliniği': [
+    'dis_klinigi': [
       { icon: '🦷', name: 'İmplant', desc: 'Kalıcı diş implant tedavisi' },
       { icon: '😁', name: 'Ortodonti', desc: 'Braces ve şeffaf plak' },
       { icon: '✨', name: 'Estetik Diş', desc: 'Beyazlatma ve veneer' },
+      { icon: '🔬', name: 'Kanal Tedavisi', desc: 'Ağrısız kanal tedavisi' },
+      { icon: '🛡️', name: 'Diş Protezi', desc: 'Tam ve kısmi protez' },
+      { icon: '🩺', name: 'Genel Muayene', desc: 'Periyodik diş kontrolü' },
     ],
-    'Restoran': [
+    'restoran': [
       { icon: '🍽️', name: 'Ana Yemekler', desc: 'Geleneksel Türk mutfağı' },
       { icon: '🥗', name: 'Salatalar', desc: 'Taze ve sağlıklı seçenekler' },
       { icon: '🎂', name: 'Tatlılar', desc: 'El yapımı tatlılar' },
+      { icon: '🍷', name: 'İçecekler', desc: 'Geniş içecek menüsü' },
+      { icon: '🎉', name: 'Özel Etkinlik', desc: 'Organizasyon ve catering' },
+      { icon: '🚚', name: 'Paket Servis', desc: 'Hızlı teslimat hizmeti' },
     ],
-    'Avukat': [
+    'avukat': [
       { icon: '⚖️', name: 'Ceza Hukuku', desc: 'Profesyonel savunma' },
       { icon: '🏠', name: 'Gayrimenkul', desc: 'Tapu ve kira uyuşmazlıkları' },
       { icon: '💼', name: 'Şirket Hukuku', desc: 'Kurumsal hukuki danışmanlık' },
+      { icon: '👨‍👩‍👧', name: 'Aile Hukuku', desc: 'Boşanma ve velayet' },
+      { icon: '🚗', name: 'Trafik Hukuku', desc: 'Kaza ve tazminat davaları' },
+      { icon: '📋', name: 'Sözleşme', desc: 'Sözleşme hazırlama ve inceleme' },
+    ],
+    'guzellik_salonu': [
+      { icon: '💇', name: 'Saç Tasarımı', desc: 'Kesim, boyama ve şekillendirme' },
+      { icon: '💅', name: 'Manikür & Pedikür', desc: 'El ve ayak bakımı' },
+      { icon: '✨', name: 'Cilt Bakımı', desc: 'Profesyonel cilt tedavileri' },
+      { icon: '👁️', name: 'Kaş & Kirpik', desc: 'Kalıcı makyaj uygulamaları' },
+      { icon: '🧖', name: 'Masaj & SPA', desc: 'Rahatlatıcı masaj seansları' },
+      { icon: '💄', name: 'Gelin Paketi', desc: 'Düğün öncesi özel paket' },
+    ],
+    'insaat': [
+      { icon: '🏗️', name: 'Konut İnşaatı', desc: 'Anahtar teslim ev yapımı' },
+      { icon: '🏢', name: 'Ticari Yapılar', desc: 'Ofis ve mağaza inşaatı' },
+      { icon: '🔨', name: 'Tadilat', desc: 'İç mekan yenileme hizmetleri' },
+      { icon: '🪟', name: 'Çatı & Cephe', desc: 'Mantolama ve çatı işleri' },
+      { icon: '🔧', name: 'Tesisat', desc: 'Su, elektrik, doğalgaz tesisatı' },
+      { icon: '📐', name: 'Mimari Proje', desc: 'Ruhsat ve proje çizimi' },
+    ],
+    'oto_galeri': [
+      { icon: '🚗', name: '2. El Araçlar', desc: 'Garantili ikinci el satış' },
+      { icon: '🆕', name: 'Sıfır Araçlar', desc: 'Tüm marka ve modeller' },
+      { icon: '🔄', name: 'Takas', desc: 'Araç takası yapılır' },
+      { icon: '💳', name: 'Kredi', desc: 'Uygun faizli araç kredisi' },
+      { icon: '🔧', name: 'Servis', desc: 'Periyodik bakım hizmetleri' },
+      { icon: '📋', name: 'Araç Ekspertiz', desc: 'Güvenilir ekspertiz raporu' },
+    ],
+    'otel': [
+      { icon: '🛏️', name: 'Standart Oda', desc: 'Konforlu konaklama seçeneği' },
+      { icon: '👑', name: 'Suite Oda', desc: 'Lüks suite odalarımız' },
+      { icon: '🍳', name: 'Kahvaltı', desc: 'Açık büfe kahvaltı dahil' },
+      { icon: '🏊', name: 'Havuz & SPA', desc: 'Kapalı ve açık havuz' },
+      { icon: '🎉', name: 'Organizasyon', desc: 'Düğün ve toplantı salonları' },
+      { icon: '🚗', name: 'Transfer', desc: 'Havalimanı transfer hizmeti' },
+    ],
+    'veteriner': [
+      { icon: '🐶', name: 'Genel Muayene', desc: 'Köpek ve kedi muayenesi' },
+      { icon: '💉', name: 'Aşılama', desc: 'Rutin aşı programları' },
+      { icon: '🔬', name: 'Laboratuvar', desc: 'Kan ve idrar tahlili' },
+      { icon: '🦷', name: 'Diş Bakımı', desc: 'Veteriner diş tedavisi' },
+      { icon: '🏥', name: 'Ameliyat', desc: 'Modern cerrahi ekipman' },
+      { icon: '🛁', name: 'Grooming', desc: 'Tıraş ve banyo hizmeti' },
+    ],
+    'muhasebe': [
+      { icon: '📊', name: 'Muhasebe', desc: 'Aylık muhasebe hizmetleri' },
+      { icon: '📋', name: 'Vergi Beyanı', desc: 'KDV ve gelir vergisi beyanı' },
+      { icon: '💼', name: 'Şirket Kuruluşu', desc: 'Hızlı şirket kuruluş hizmeti' },
+      { icon: '💰', name: 'Maaş Bordrosu', desc: 'SGK ve bordro işlemleri' },
+      { icon: '🔍', name: 'Denetim', desc: 'Mali müşavirlik ve denetim' },
+      { icon: '📈', name: 'Finansal Analiz', desc: 'İşletme karlılık analizi' },
+    ],
+    'saglik': [
+      { icon: '🩺', name: 'Genel Muayene', desc: 'Uzman doktor muayenesi' },
+      { icon: '🔬', name: 'Tahlil', desc: 'Kan ve idrar tahlili' },
+      { icon: '📡', name: 'Görüntüleme', desc: 'Röntgen, USG, MR' },
+      { icon: '💊', name: 'Poliklinik', desc: 'Tüm branşlarda uzman' },
+      { icon: '🏥', name: 'Check-Up', desc: 'Kapsamlı sağlık taraması' },
+      { icon: '🚑', name: 'Acil', desc: '7/24 acil servis hizmeti' },
     ],
   }
-  return map[sector] || [
+  return (map[sector] || [
     { icon: '✅', name: 'Hizmet 1', desc: 'Profesyonel çözümler' },
     { icon: '🎯', name: 'Hizmet 2', desc: 'Müşteri odaklı yaklaşım' },
     { icon: '💎', name: 'Hizmet 3', desc: 'Kaliteli ve güvenilir' },
-  ]
+  ]).slice(0, 6)
 }
