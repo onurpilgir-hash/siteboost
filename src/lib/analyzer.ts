@@ -192,6 +192,7 @@ async function analyzeWithClaude(
   action_plan: string
   package_recommendation: string
   estimated_monthly_loss: number
+  sector_detected?: string
 }> {
   const OpenAI = (await import('openai')).default
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
