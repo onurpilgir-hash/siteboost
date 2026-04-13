@@ -179,7 +179,8 @@ JSON formatında yanıt ver (başka hiçbir şey yazma):
   "improvement_doc": "<Her kriter için sorun-neden-çözüm-beklenen puan formatında detaylı Türkçe döküman>",
   "action_plan": "<30/60/90 günlük aksiyon planı Türkçe>",
   "package_recommendation": "<temel|standart|premium - kısa gerekçe>",
-  "estimated_monthly_loss": <tahmini aylık gelir kaybı TL cinsinden sayı - hesaplama mantığı: sitenin hız puanı düşükse ziyaretçilerin %40-60'ı siteyi terk eder, mobil puan düşükse mobil kullanıcıların %50'si kaçar, SEO düşükse organik trafik %70 az gelir. Diş kliniği için ortalama müşteri değeri 2000-5000₺, restoran için 500-1500₺, inşaat için 50000-200000₺ gibi sektöre göre gerçekçi hesapla. Toplam kayıp aylık 10.000₺ ile 500.000₺ arasında olmalı, sitenin puanına ve sektörüne göre değişmeli>
+  "estimated_monthly_loss": <tahmini aylık gelir kaybı TL cinsinden sayı - hesaplama mantığı: sitenin hız puanı düşükse ziyaretçilerin %40-60'ı siteyi terk eder, mobil puan düşükse mobil kullanıcıların %50'si kaçar, SEO düşükse organik trafik %70 az gelir. Diş kliniği için ortalama müşteri değeri 2000-5000₺, restoran için 500-1500₺, inşaat için 50000-200000₺ gibi sektöre göre gerçekçi hesapla. Toplam kayıp aylık 10.000₺ ile 500.000₺ arasında olmalı, sitenin puanına ve sektörüne göre değişmeli>,
+  "sector_detected": "<sitenin sektörünü tespit et, şu değerlerden birini yaz: dis_klinigi | restoran | avukat | guzellik_salonu | insaat | oto_galeri | otel | veteriner | muhasebe | saglik | genel>"
 }`
 
   const completion = await openai.chat.completions.create({
@@ -229,6 +230,9 @@ function calculateOverallScore(scores: {
 // Ana analiz fonksiyonu
 export async function analyzeSite(url: string, leadId: string) {
   const supabase = createAdminSupabase()
+
+  // Lead bilgilerini oku (sektör, email vb.)
+  const { data: lead } = await supabase.from('leads').select('sector, email, name').eq('id', leadId).single()
 
   // Mock mod — geliştirme sırasında gerçek API çağrısı yapmaz
   if (process.env.MOCK_MODE === 'true') {
@@ -350,6 +354,8 @@ export async function analyzeSite(url: string, leadId: string) {
           genel,
         },
         latest_report_id: analysis?.id,
+        // Sektör boşsa veya 'genel' ise AI'ın tespit ettiğini kullan
+        ...(!lead?.sector || lead.sector === 'genel' ? { sector: claudeData.sector_detected || 'genel' } : {}),
       })
       .eq('id', leadId)
 
