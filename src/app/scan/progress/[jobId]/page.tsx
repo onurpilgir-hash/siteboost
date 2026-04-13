@@ -41,6 +41,7 @@ export default function ScanProgressPage() {
     poll()
     const interval = setInterval(poll, 3000)
     return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId])
 
   const runAnalysis = async () => {

@@ -73,28 +73,6 @@ export default function ScanResultPage() {
   const [polling, setPolling] = useState(true)
   const [showImprovement, setShowImprovement] = useState(false)
   const [showActionPlan, setShowActionPlan] = useState(false)
-  const [emailSending, setEmailSending] = useState(false)
-  const [emailSent, setEmailSent] = useState(false)
-  const [emailError, setEmailError] = useState('')
-
-  const sendEmail = async () => {
-    setEmailSending(true)
-    setEmailError('')
-    try {
-      const res = await fetch(`/api/leads/${leadId}/send-email`, { method: 'POST' })
-      const data = await res.json()
-      if (res.ok) {
-        setEmailSent(true)
-      } else {
-        setEmailError(data.error || 'Mail gönderilemedi')
-      }
-    } catch {
-      setEmailError('Bağlantı hatası')
-    } finally {
-      setEmailSending(false)
-    }
-  }
-
   useEffect(() => {
     if (!leadId) return
     let attempts = 0
