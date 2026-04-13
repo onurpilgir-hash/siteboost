@@ -202,26 +202,12 @@ export default function ScanResultPage() {
             >
               <Download className="w-4 h-4" /> PDF İndir
             </a>
-            <button
-              onClick={sendEmail}
-              disabled={emailSending || emailSent}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                emailSent
-                  ? 'bg-green-900/50 text-green-400 border border-green-800 cursor-default'
-                  : 'btn-primary'
-              }`}
+            <a
+              href={`/scan/result/${leadId}/review`}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium btn-primary"
             >
-              {emailSending ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Gönderiliyor...</>
-              ) : emailSent ? (
-                <><CheckCircle className="w-4 h-4" /> Mail Gönderildi</>
-              ) : (
-                <><Mail className="w-4 h-4" /> Mail Gönder</>
-              )}
-            </button>
-            {emailError && (
-              <p className="text-red-400 text-xs mt-1">{emailError}</p>
-            )}
+              <Mail className="w-4 h-4" /> Demo İncele & Gönder
+            </a>
           </div>
         </div>
 

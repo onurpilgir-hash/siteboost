@@ -26,6 +26,10 @@ interface DemoData {
     primary_color?: string
     address_text?: string
     extracted_phone?: string
+    extracted_services?: string[]
+    about_text?: string
+    founding_year?: string
+    gallery_images?: string[]
   }
   expired: boolean
   brand_name: string
@@ -359,7 +363,14 @@ export default function DemoPage() {
   const { lead, analysis } = data
   const sector = lead.sector || 'genel'
   const theme = SECTOR_THEMES[sector] || DEFAULT_THEME
-  const services = getSectorServices(sector)
+  // Gerçek hizmetler varsa kullan, yoksa sektör şablonuna dön
+  const realServices = analysis.extracted_services && analysis.extracted_services.length >= 3
+    ? analysis.extracted_services.slice(0, 6).map((name, i) => {
+        const template = getSectorServices(sector)[i]
+        return { icon: template?.icon || '✅', name, desc: template?.desc || 'Profesyonel hizmet' }
+      })
+    : null
+  const services = realServices || getSectorServices(sector)
   const reviews = SECTOR_REVIEWS[sector] || DEFAULT_REVIEWS
   const phone = lead.phone || analysis.extracted_phone
   const address = analysis.address_text || (lead.city + (lead.district ? `, ${lead.district}` : ''))
@@ -465,6 +476,7 @@ export default function DemoPage() {
           </p>
           <p className="text-base opacity-75 mb-8 max-w-2xl mx-auto">
             {theme.heroSub} — {lead.city}{lead.district ? ` / ${lead.district}` : ''}
+            {analysis.founding_year ? ` • ${analysis.founding_year}'den beri hizmetinizdeyiz` : ''}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -515,6 +527,28 @@ export default function DemoPage() {
           </div>
         </div>
       </section>
+
+      {/* Hakkımızda — sadece gerçek içerik varsa göster */}
+      {analysis.about_text && (
+        <section className="py-16 px-6 bg-white">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-center">
+            <div className="flex-1">
+              <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>Hakkımızda</span>
+              <h2 className="text-2xl font-extrabold text-gray-900 mb-4">{lead.name}</h2>
+              <p className="text-gray-600 leading-relaxed">{analysis.about_text}</p>
+              {analysis.founding_year && (
+                <p className="mt-4 text-sm font-semibold" style={{ color: theme.primary }}>
+                  {analysis.founding_year}'den beri hizmetinizdeyiz
+                </p>
+              )}
+            </div>
+            <div className="w-32 h-32 rounded-2xl flex items-center justify-center text-white text-5xl font-extrabold flex-shrink-0"
+              style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.primary}99)` }}>
+              {lead.name.charAt(0)}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Neden Biz */}
       <section id="neden-biz" className="py-20 px-6 bg-white">

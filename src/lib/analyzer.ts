@@ -152,6 +152,37 @@ async function analyzeHTML(url: string) {
   const phoneMatch = html.match(/(?:0\s*)?(?:\(\s*)?(\d{3})(?:\s*\)?\s*[-\s]?)(\d{3})(?:[-\s]?)(\d{2})(?:[-\s]?)(\d{2})/)
   const extracted_phone = phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : null
 
+  // Hizmetler — h2/h3 başlıklarından çıkar
+  const headingMatches = html.match(/<h[23][^>]*>([^<]{3,60})<\/h[23]>/gi) || []
+  const stopWords = ['hakkımızda', 'iletişim', 'contact', 'about', 'blog', 'haberler', 'galeri', 'referans', 'anasayfa', 'home', 'menu']
+  const extracted_services = headingMatches
+    .map(h => h.replace(/<[^>]+>/g, '').trim())
+    .filter(h => !stopWords.some(sw => h.toLowerCase().includes(sw)) && h.length > 3 && h.length < 60)
+    .slice(0, 8)
+
+  // Hakkımızda metni
+  const aboutMatch = html.match(/(?:hakkımızda|hakkında|biz kimiz|hikayemiz)[^<]{0,200}<p[^>]*>([\s\S]{50,400})<\/p>/i)
+    || html.match(/<section[^>]*(?:about|hakkimizda)[^>]*>[\s\S]*?<p[^>]*>([\s\S]{50,400})<\/p>/i)
+  const about_text = aboutMatch ? aboutMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 300) : null
+
+  // Kuruluş yılı
+  const yearMatch = textContent.match(/(?:19|20)\d{2}(?:'(?:den|dan|ten|tan)|'dan|'den| yılından| yılında| yılı)/)
+    || textContent.match(/(?:kuruluş|kuruldu|established|founded)[^.]{0,30}((?:19|20)\d{2})/)
+  const founding_year = yearMatch ? yearMatch[0].match(/((?:19|20)\d{2})/)?.[1] || null : null
+
+  // Galeri görselleri — logo olmayan, boyutlu görseller
+  const imgMatches = html.match(/<img[^>]*src=["']([^"']{10,}\.(?:jpg|jpeg|png|webp))[^"']*["'][^>]*>/gi) || []
+  const origin = new URL(finalUrl).origin
+  const gallery_images = imgMatches
+    .map(img => {
+      const src = img.match(/src=["']([^"']+)["']/)?.[1] || ''
+      if (!src) return null
+      if (src.toLowerCase().includes('logo') || src.toLowerCase().includes('icon') || src.toLowerCase().includes('favicon')) return null
+      return src.startsWith('http') ? src : `${origin}${src.startsWith('/') ? '' : '/'}${src}`
+    })
+    .filter(Boolean)
+    .slice(0, 4) as string[]
+
   return {
     has_ssl,
     guvenlik: Math.min(guvenlik, 10),
@@ -173,6 +204,10 @@ async function analyzeHTML(url: string) {
     primary_color,
     address_text,
     extracted_phone,
+    extracted_services,
+    about_text,
+    founding_year,
+    gallery_images,
   }
 }
 
@@ -379,6 +414,10 @@ export async function analyzeSite(url: string, leadId: string) {
         primary_color: htmlData.primary_color,
         address_text: htmlData.address_text,
         extracted_phone: htmlData.extracted_phone,
+        extracted_services: htmlData.extracted_services,
+        about_text: htmlData.about_text,
+        founding_year: htmlData.founding_year,
+        gallery_images: htmlData.gallery_images,
       })
       .select()
       .single()
