@@ -369,19 +369,31 @@ export default function DemoPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
 
-      {/* Demo Bandı — ince, üstte */}
-      <div className="bg-gray-900 text-white px-4 py-2 flex items-center justify-between text-xs">
+      {/* Demo Bandı — üstte */}
+      <div className="bg-gray-950 text-white px-4 py-2.5 flex items-center justify-between text-xs border-b border-gray-800">
         <div className="flex items-center gap-3">
-          <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold tracking-wide">DEMO</span>
-          <span className="text-gray-300 hidden sm:inline">{data.brand_name} tarafından hazırlandı</span>
-          <span className="text-gray-500">•</span>
+          {/* Eski site butonu */}
+          <a
+            href={lead.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all font-medium"
+            title="Mevcut sitenizi yeni sekmede açar"
+          >
+            ← Eski siteniz
+          </a>
+          <span className="text-gray-600 hidden sm:inline">vs</span>
+          <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold tracking-wide hidden sm:inline">YENİ DEMO</span>
+          <span className="text-gray-600 hidden md:inline">•</span>
+          <span className="text-gray-400 hidden md:inline">{data.brand_name} tarafından hazırlandı</span>
+          <span className="text-gray-600">•</span>
           <Clock className="w-3 h-3 text-yellow-400" />
           <span className="text-yellow-300">{daysLeft} gün kaldı</span>
         </div>
         <button
           onClick={requestPrice}
           disabled={priceSent}
-          className={`text-xs font-semibold px-4 py-1.5 rounded-lg transition-all ${
+          className={`text-xs font-semibold px-4 py-1.5 rounded-lg transition-all whitespace-nowrap ${
             priceSent
               ? 'bg-green-800 text-green-300 cursor-default'
               : 'bg-blue-600 hover:bg-blue-500 text-white'
@@ -618,6 +630,54 @@ export default function DemoPage() {
                 </a>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Yapılan İyileştirmeler */}
+      <section className="py-16 px-6 bg-gray-950 text-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-3 block">Bu Demo Sitede Yapılanlar</span>
+            <h2 className="text-2xl font-extrabold mb-2">Eski sitenizde eksik olan her şey tamamlandı</h2>
+            <p className="text-gray-400 text-sm">Analiz raporunuzda tespit edilen sorunlar bu demo sitede çözülmüş olarak gösterilmektedir</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { icon: '📱', title: 'Mobil Uyumlu Tasarım', desc: 'Her ekran boyutunda mükemmel görünüm' },
+              { icon: '⚡', title: 'Hızlı Yükleme', desc: 'Optimize edilmiş kod ve görseller' },
+              { icon: '🔍', title: 'SEO Optimizasyonu', desc: 'Google\'da üst sıralara çıkacak yapı' },
+              { icon: '💬', title: 'WhatsApp Entegrasyonu', desc: 'Müşteriler tek tuşla ulaşabilir' },
+              { icon: '📋', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
+              { icon: '🔒', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
+              { icon: '📊', title: 'Google Analytics', desc: 'Ziyaretçi takibi ve raporlama' },
+              { icon: '🗺️', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-xl p-4">
+                <span className="text-2xl">{item.icon}</span>
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-green-400 text-xs font-bold">✓ TAMAMLANDI</span>
+                  </div>
+                  <p className="font-semibold text-white text-sm">{item.title}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <button
+              onClick={requestPrice}
+              disabled={priceSent}
+              className={`text-base font-bold px-8 py-4 rounded-xl transition-all ${
+                priceSent
+                  ? 'bg-green-900 text-green-300 cursor-default'
+                  : 'bg-blue-600 hover:bg-blue-500 text-white'
+              }`}
+            >
+              {priceSent ? '✓ Talebiniz Alındı — Sizi Arayacağız' : '💡 Bu Siteyi Gerçek Yapmak İstiyorum →'}
+            </button>
+            <p className="text-gray-500 text-xs mt-3">Ücretsiz danışma • Fiyat teklifi • Bağlayıcı değil</p>
           </div>
         </div>
       </section>
