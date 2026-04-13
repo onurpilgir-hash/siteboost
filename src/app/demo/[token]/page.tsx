@@ -476,7 +476,7 @@ export default function DemoPage() {
           </p>
           <p className="text-base opacity-75 mb-8 max-w-2xl mx-auto">
             {theme.heroSub} — {lead.city}{lead.district ? ` / ${lead.district}` : ''}
-            {analysis.founding_year ? ` • ${analysis.founding_year}'den beri hizmetinizdeyiz` : ''}
+            {analysis.founding_year ? ` • ${analysis.founding_year}\u2019den beri hizmetinizdeyiz` : ''}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -538,7 +538,7 @@ export default function DemoPage() {
               <p className="text-gray-600 leading-relaxed">{analysis.about_text}</p>
               {analysis.founding_year && (
                 <p className="mt-4 text-sm font-semibold" style={{ color: theme.primary }}>
-                  {analysis.founding_year}'den beri hizmetinizdeyiz
+                  {analysis.founding_year}&apos;den beri hizmetinizdeyiz
                 </p>
               )}
             </div>
