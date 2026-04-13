@@ -115,6 +115,43 @@ async function analyzeHTML(url: string) {
   const wordCount = textContent.split(' ').length
   const icerik_kalitesi = Math.min(wordCount / 100, 10)
 
+  // Logo URL — "logo" geçen img src'si, yoksa favicon
+  const logoMatch = html.match(/<img[^>]*(?:class|id|alt|src)=["'][^"']*logo[^"']*["'][^>]*src=["']([^"']+)["']/i)
+    || html.match(/<img[^>]*src=["']([^"']*logo[^"']+)["']/i)
+  let logo_url: string | null = null
+  if (logoMatch?.[1]) {
+    const src = logoMatch[1]
+    logo_url = src.startsWith('http') ? src : `${new URL(finalUrl).origin}${src.startsWith('/') ? '' : '/'}${src}`
+  } else {
+    logo_url = `${new URL(finalUrl).origin}/favicon.ico`
+  }
+
+  // Primary color — CSS'teki hex renkleri say, en çok geçeni al
+  const hexMatches = html.match(/#([0-9a-fA-F]{6})\b/g) || []
+  const colorCounts: Record<string, number> = {}
+  for (const c of hexMatches) {
+    const lower = c.toLowerCase()
+    // Çok açık (beyaz) veya çok koyu (siyah) renkleri atla
+    if (lower !== '#ffffff' && lower !== '#000000' && lower !== '#fff' && lower !== '#000') {
+      colorCounts[lower] = (colorCounts[lower] || 0) + 1
+    }
+  }
+  const primary_color = Object.entries(colorCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+
+  // Adres — <address> tagi veya "Adres:", "Mahallesi", "Caddesi" içeren metin
+  const addressTagMatch = html.match(/<address[^>]*>([\s\S]*?)<\/address>/i)
+  let address_text: string | null = null
+  if (addressTagMatch) {
+    address_text = addressTagMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200)
+  } else {
+    const addrMatch = textContent.match(/(?:Adres|Mahallesi|Caddesi|Sokak|Bulvarı|No:)[^.]{10,100}/i)
+    address_text = addrMatch?.[0]?.trim() || null
+  }
+
+  // Telefon — HTML'den ilk Türk telefon numarası
+  const phoneMatch = html.match(/(?:0\s*)?(?:\(\s*)?(\d{3})(?:\s*\)?\s*[-\s]?)(\d{3})(?:[-\s]?)(\d{2})(?:[-\s]?)(\d{2})/)
+  const extracted_phone = phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : null
+
   return {
     has_ssl,
     guvenlik: Math.min(guvenlik, 10),
@@ -131,7 +168,11 @@ async function analyzeHTML(url: string) {
     has_google_analytics,
     has_pixel,
     security_headers: securityHeaders,
-    html_snippet: html.substring(0, 5000),  // Claude için ilk 5000 karakter
+    html_snippet: html.substring(0, 5000),
+    logo_url,
+    primary_color,
+    address_text,
+    extracted_phone,
   }
 }
 
@@ -333,6 +374,10 @@ export async function analyzeSite(url: string, leadId: string) {
         has_whatsapp: htmlData.has_whatsapp,
         has_google_analytics: htmlData.has_google_analytics,
         has_pixel: htmlData.has_pixel,
+        logo_url: htmlData.logo_url,
+        primary_color: htmlData.primary_color,
+        address_text: htmlData.address_text,
+        extracted_phone: htmlData.extracted_phone,
       })
       .select()
       .single()
