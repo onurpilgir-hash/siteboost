@@ -11,8 +11,6 @@ import {
   Smartphone, Search, Lock, MessageCircle, FileText, Globe, Laptop,
   type LucideIcon
 } from 'lucide-react'
-import type React from 'react'
-
 const ICON_MAP: Record<string, LucideIcon> = {
   stethoscope: Stethoscope, sparkles: Sparkles, shield: Shield,
   calendar: Calendar, heart: Heart, award: Award, zap: Zap,
@@ -28,7 +26,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   globe: Globe, laptop: Laptop, clock: Clock,
 }
 
-function SvcIcon({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) {
+function SvcIcon({ name, className, style }: { name: string; className?: string; style?: { color?: string; [key: string]: unknown } }) {
   const Icon = ICON_MAP[name] || CheckCircle
   return <Icon className={className} style={style} />
 }
