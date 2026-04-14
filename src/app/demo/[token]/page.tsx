@@ -47,7 +47,7 @@ interface DemoData {
     demo_expires_at: string
   }
   analysis: {
-    score_genel: number
+    score_genel?: number
     package_recommendation?: string
     logo_url?: string
     primary_color?: string
@@ -57,7 +57,7 @@ interface DemoData {
     about_text?: string
     founding_year?: string
     gallery_images?: string[]
-  }
+  } | null
   expired: boolean
   brand_name: string
   app_url: string
@@ -364,14 +364,15 @@ export default function DemoPage() {
     )
   }
 
-  const { lead, analysis } = data
+  const { lead } = data
+  const analysis = data.analysis || {}  // null-safe: sıfırdan demolar için analiz olmayabilir
   const sector = lead.sector || 'genel'
   const theme = SECTOR_THEMES[sector] || DEFAULT_THEME
   // Gerçek hizmetler varsa kullan, yoksa sektör şablonuna dön
   const realServices = analysis.extracted_services && analysis.extracted_services.length >= 3
-    ? analysis.extracted_services.slice(0, 6).map((name, i) => {
+    ? analysis.extracted_services.slice(0, 6).map((name: string, i: number) => {
         const template = getSectorServices(sector)[i]
-        return { icon: template?.icon || '✅', name, desc: template?.desc || 'Profesyonel hizmet' }
+        return { icon: template?.icon || 'check', name, desc: template?.desc || 'Profesyonel hizmet' }
       })
     : null
   const services = realServices || getSectorServices(sector)
