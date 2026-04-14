@@ -7,7 +7,7 @@ import crypto from 'crypto'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, sector, city, district, phone, email, services, about, referenceUrl, colorPreference, mode } = body
+    const { name, sector, city, district, phone, email, about, referenceUrl, mode } = body
 
     if (!name || !sector || !city || !phone) {
       return NextResponse.json({ error: 'Firma adı, sektör, şehir ve telefon zorunludur' }, { status: 400 })
@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
         phone,
         email: email || null,
         website: referenceUrl || null,
-        has_website: false,
         pipeline_stage: 'bilgi_formu',
       })
       .select('id, name')
@@ -34,32 +33,30 @@ export async function POST(req: NextRequest) {
 
     if (leadError || !lead) throw leadError || new Error('Lead oluşturulamadı')
 
-    // Müşterinin girdiği içerik — site_analyses'e kaydet
-    const extractedServices = services
-      ? services.split(',').map((s: string) => s.trim()).filter(Boolean)
-      : null
+    // site_analyses — başarısız olsa bile devam et
 
-    await supabase.from('site_analyses').insert({
-      lead_id: lead.id,
-      score_genel: 0,
-      score_hiz: 0, score_mobil: 0, score_seo: 0, score_ux: 0,
-      score_icerik: 0, score_erisilebilirlik: 0, score_guvenlik: 0,
-      score_donusum: 0, score_ab_test: 0,
-      extracted_services: extractedServices,
-      about_text: about || null,
-      primary_color: colorPreference || null,
-      seo_analysis: 'Sıfırdan site talebi — analiz yapılmadı',
-      content_analysis: 'Müşteri form bilgileriyle oluşturulacak',
-      improvement_doc: '',
-      action_plan: '',
-      package_recommendation: 'baslangic',
-      estimated_monthly_loss: 0,
-      has_ssl: false,
-      has_mobile_menu: false,
-      has_contact_form: false,
-      has_whatsapp: false,
-      has_google_analytics: false,
-    })
+    try {
+      await supabase.from('site_analyses').insert({
+        lead_id: lead.id,
+        score_genel: 0,
+        score_hiz: 0, score_mobil: 0, score_seo: 0, score_ux: 0,
+        score_icerik: 0, score_erisilebilirlik: 0, score_guvenlik: 0,
+        score_donusum: 0, score_ab_test: 0,
+        seo_analysis: 'Sıfırdan site talebi',
+        content_analysis: about || 'Müşteri form bilgileriyle oluşturulacak',
+        improvement_doc: '',
+        action_plan: '',
+        package_recommendation: 'baslangic',
+        estimated_monthly_loss: 0,
+        has_ssl: false,
+        has_mobile_menu: false,
+        has_contact_form: false,
+        has_whatsapp: false,
+        has_google_analytics: false,
+      })
+    } catch (e) {
+      console.warn('site_analyses insert skipped:', e)
+    }
 
     // Demo oluştur
     const token = crypto.randomBytes(16).toString('hex')
@@ -67,12 +64,13 @@ export async function POST(req: NextRequest) {
     const demoUrl = `${appUrl}/demo/${token}`
     const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
 
-    await supabase.from('reports').insert({
+    const { error: reportError } = await supabase.from('reports').insert({
       lead_id: lead.id,
       demo_url: demoUrl,
       demo_token: token,
       demo_expires_at: expiresAt,
     })
+    if (reportError) throw reportError
 
     // Telegram bildirimi
     const msg = mode === 'customer'
