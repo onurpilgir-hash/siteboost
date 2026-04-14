@@ -80,8 +80,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ leadId: lead.id, demoUrl })
   } catch (error) {
-    console.error('bilgi-formu error:', error)
-    return NextResponse.json({ error: 'Form kaydedilemedi' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : JSON.stringify(error)
+    console.error('bilgi-formu error:', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
