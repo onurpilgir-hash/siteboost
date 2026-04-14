@@ -2,7 +2,36 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Clock, Phone, MapPin, Star, ExternalLink, CheckCircle, ChevronRight } from 'lucide-react'
+import {
+  Clock, Phone, MapPin, Star, ExternalLink, CheckCircle, ChevronRight,
+  Stethoscope, Sparkles, Shield, Calendar, Heart, Award, Zap, Users,
+  ChefHat, Leaf, Truck, Scale, Building2, Home, Car, CreditCard,
+  Bed, Coffee, PawPrint, Syringe, Scissors, BarChart3, Receipt,
+  Activity, Wrench, HardHat, Briefcase, Smile, Camera, Microscope,
+  Smartphone, Search, Lock, MessageCircle, FileText, Globe, Laptop,
+  type LucideIcon
+} from 'lucide-react'
+import type React from 'react'
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  stethoscope: Stethoscope, sparkles: Sparkles, shield: Shield,
+  calendar: Calendar, heart: Heart, award: Award, zap: Zap,
+  users: Users, chef: ChefHat, leaf: Leaf, truck: Truck,
+  scale: Scale, building: Building2, home: Home, car: Car,
+  credit: CreditCard, bed: Bed, coffee: Coffee, paw: PawPrint,
+  syringe: Syringe, scissors: Scissors, chart: BarChart3,
+  receipt: Receipt, activity: Activity, wrench: Wrench,
+  hardhat: HardHat, briefcase: Briefcase, smile: Smile,
+  camera: Camera, microscope: Microscope, star: Star,
+  phone: Phone, check: CheckCircle, smartphone: Smartphone,
+  search: Search, lock: Lock, chat: MessageCircle, doc: FileText,
+  globe: Globe, laptop: Laptop, clock: Clock,
+}
+
+function SvcIcon({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) {
+  const Icon = ICON_MAP[name] || CheckCircle
+  return <Icon className={className} style={style} />
+}
 
 interface DemoData {
   lead: {
@@ -53,9 +82,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Sağlıklı Gülüşler, Mutlu Hayatlar',
     heroSub: 'Modern ekipmanlar ve uzman kadromuzla ağrısız, güvenilir diş tedavisi',
     whyUs: [
-      { icon: '😊', title: 'Ağrısız Tedavi', desc: 'Son teknoloji ekipmanlarla konforlu tedavi' },
-      { icon: '🔬', title: 'Modern Klinik', desc: 'Dijital röntgen ve 3D tarama sistemleri' },
-      { icon: '📅', title: 'Kolay Randevu', desc: 'Online randevu, beklemeden muayene' },
+      { icon: 'heart', title: 'Ağrısız Tedavi', desc: 'Son teknoloji ekipmanlarla konforlu tedavi' },
+      { icon: 'microscope', title: 'Modern Klinik', desc: 'Dijital röntgen ve 3D tarama sistemleri' },
+      { icon: 'calendar', title: 'Kolay Randevu', desc: 'Online randevu, beklemeden muayene' },
     ],
   },
   restoran: {
@@ -66,9 +95,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Lezzet ve Kalitenin Buluşma Noktası',
     heroSub: 'Geleneksel Türk mutfağını modern dokunuşlarla sunuyoruz',
     whyUs: [
-      { icon: '👨‍🍳', title: 'Usta Şefler', desc: 'Deneyimli mutfak ekibimizle özgün lezzetler' },
-      { icon: '🌿', title: 'Taze Malzeme', desc: 'Her gün temin edilen taze ve doğal ürünler' },
-      { icon: '🎉', title: 'Özel Etkinlik', desc: 'Organizasyon ve catering hizmetleri' },
+      { icon: 'chef', title: 'Usta Şefler', desc: 'Deneyimli mutfak ekibimizle özgün lezzetler' },
+      { icon: 'leaf', title: 'Taze Malzeme', desc: 'Her gün temin edilen taze ve doğal ürünler' },
+      { icon: 'sparkles', title: 'Özel Etkinlik', desc: 'Organizasyon ve catering hizmetleri' },
     ],
   },
   avukat: {
@@ -79,9 +108,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Hukuki Sorunlarınızda Güvenilir Çözüm Ortağı',
     heroSub: 'Deneyimli avukat kadromuzla haklarınızı koruyoruz',
     whyUs: [
-      { icon: '⚖️', title: 'Uzman Kadro', desc: '20+ yıllık hukuki deneyim' },
-      { icon: '🤝', title: 'Gizlilik', desc: 'Her müvekkile özel ve gizli hizmet' },
-      { icon: '⚡', title: 'Hızlı Çözüm', desc: 'Süreçleri hızlandıran dijital takip sistemi' },
+      { icon: 'scale', title: 'Uzman Kadro', desc: '20+ yıllık hukuki deneyim' },
+      { icon: 'shield', title: 'Gizlilik', desc: 'Her müvekkile özel ve gizli hizmet' },
+      { icon: 'zap', title: 'Hızlı Çözüm', desc: 'Süreçleri hızlandıran dijital takip sistemi' },
     ],
   },
   guzellik_salonu: {
@@ -92,9 +121,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Güzelliğinizi Keşfedin',
     heroSub: 'Profesyonel ekibimizle en iyi bakım ve güzellik hizmetleri',
     whyUs: [
-      { icon: '💎', title: 'Premium Ürünler', desc: 'Sadece en kaliteli marka ürünler kullanılır' },
-      { icon: '👩‍🎨', title: 'Uzman Ekip', desc: 'Sertifikalı ve deneyimli güzellik uzmanları' },
-      { icon: '🌸', title: 'Kişisel Bakım', desc: 'Size özel bakım programları' },
+      { icon: 'award', title: 'Premium Ürünler', desc: 'Sadece en kaliteli marka ürünler kullanılır' },
+      { icon: 'users', title: 'Uzman Ekip', desc: 'Sertifikalı ve deneyimli güzellik uzmanları' },
+      { icon: 'sparkles', title: 'Kişisel Bakım', desc: 'Size özel bakım programları' },
     ],
   },
   insaat: {
@@ -105,9 +134,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Hayalinizdeki Yapıyı İnşa Ediyoruz',
     heroSub: 'Kaliteli malzeme, uzman işçilik ve zamanında teslimat garantisi',
     whyUs: [
-      { icon: '🏗️', title: 'Deneyimli Ekip', desc: '15+ yıllık sektör deneyimi' },
-      { icon: '✅', title: 'Kalite Garantisi', desc: 'ISO standartlarında malzeme ve işçilik' },
-      { icon: '📋', title: 'Zamanında Teslimat', desc: 'Sözleşme garantili teslim tarihleri' },
+      { icon: 'hardhat', title: 'Deneyimli Ekip', desc: '15+ yıllık sektör deneyimi' },
+      { icon: 'shield', title: 'Kalite Garantisi', desc: 'ISO standartlarında malzeme ve işçilik' },
+      { icon: 'clock', title: 'Zamanında Teslimat', desc: 'Sözleşme garantili teslim tarihleri' },
     ],
   },
   oto_galeri: {
@@ -118,9 +147,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Güvenilir Araç Alışverişinin Adresi',
     heroSub: 'Garantili ikinci el ve sıfır araçlar, uygun kredi seçenekleriyle',
     whyUs: [
-      { icon: '🔍', title: 'Ekspertiz Garantisi', desc: 'Tüm araçlar profesyonel ekspertizden geçer' },
-      { icon: '💳', title: 'Uygun Kredi', desc: 'Tüm banklarla anlaşmalı kredi imkanı' },
-      { icon: '🔄', title: 'Takas', desc: 'Aracınızı değerinden takas ediyoruz' },
+      { icon: 'search', title: 'Ekspertiz Garantisi', desc: 'Tüm araçlar profesyonel ekspertizden geçer' },
+      { icon: 'credit', title: 'Uygun Kredi', desc: 'Tüm bankalarla anlaşmalı kredi imkanı' },
+      { icon: 'car', title: 'Takas', desc: 'Aracınızı değerinden takas ediyoruz' },
     ],
   },
   otel: {
@@ -131,9 +160,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Konforun ve Huzurun Buluştuğu Yer',
     heroSub: 'Unutulmaz konaklama deneyimi için sizi bekliyoruz',
     whyUs: [
-      { icon: '🛏️', title: 'Konforlu Odalar', desc: 'Özenle tasarlanmış oda konseptleri' },
-      { icon: '🍳', title: 'Lezzetli Kahvaltı', desc: 'Açık büfe zengin Türk kahvaltısı' },
-      { icon: '🚗', title: 'Transfer Hizmeti', desc: 'Ücretsiz havalimanı transfer' },
+      { icon: 'bed', title: 'Konforlu Odalar', desc: 'Özenle tasarlanmış oda konseptleri' },
+      { icon: 'coffee', title: 'Lezzetli Kahvaltı', desc: 'Açık büfe zengin Türk kahvaltısı' },
+      { icon: 'car', title: 'Transfer Hizmeti', desc: 'Ücretsiz havalimanı transfer' },
     ],
   },
   veteriner: {
@@ -144,9 +173,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Dostlarınız Emin Ellerde',
     heroSub: 'Sevgili evcil hayvanlarınız için uzman veteriner hizmetleri',
     whyUs: [
-      { icon: '💝', title: 'Sevgiyle Bakım', desc: 'Her hayvanı kendi dostumuz gibi severiz' },
-      { icon: '🔬', title: 'Modern Ekipman', desc: 'Dijital röntgen ve lazer tedavi sistemleri' },
-      { icon: '🚨', title: 'Acil Servis', desc: '7/24 acil veteriner hizmeti' },
+      { icon: 'heart', title: 'Sevgiyle Bakım', desc: 'Her hayvanı kendi dostumuz gibi severiz' },
+      { icon: 'microscope', title: 'Modern Ekipman', desc: 'Dijital röntgen ve lazer tedavi sistemleri' },
+      { icon: 'zap', title: 'Acil Servis', desc: '7/24 acil veteriner hizmeti' },
     ],
   },
   muhasebe: {
@@ -157,9 +186,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'İşletmenizin Mali Geleceğini Güvence Altına Alın',
     heroSub: 'Uzman mali müşavirlik ve muhasebe hizmetleriyle yanınızdayız',
     whyUs: [
-      { icon: '📊', title: 'Dijital Muhasebe', desc: 'Bulut tabanlı anlık finansal takip' },
-      { icon: '🔒', title: 'Gizlilik', desc: 'Mali bilgileriniz %100 güvende' },
-      { icon: '⚡', title: 'Hızlı Beyan', desc: 'Tüm vergi beyanları zamanında' },
+      { icon: 'chart', title: 'Dijital Muhasebe', desc: 'Bulut tabanlı anlık finansal takip' },
+      { icon: 'lock', title: 'Gizlilik', desc: 'Mali bilgileriniz %100 güvende' },
+      { icon: 'zap', title: 'Hızlı Beyan', desc: 'Tüm vergi beyanları zamanında' },
     ],
   },
   saglik: {
@@ -170,9 +199,9 @@ const SECTOR_THEMES: Record<string, {
     heroTitle: 'Sağlığınız Bizim Önceliğimiz',
     heroSub: 'Uzman doktor kadrosu ve modern tıbbi ekipmanlarla hizmetinizdeyiz',
     whyUs: [
-      { icon: '👨‍⚕️', title: 'Uzman Doktorlar', desc: 'Alanında uzmanlaşmış hekim kadrosu' },
-      { icon: '🏥', title: 'Modern Klinik', desc: 'En son tıbbi teknoloji ve ekipmanlar' },
-      { icon: '📅', title: 'Kolay Randevu', desc: 'Online randevu sistemi, kısa bekleme süresi' },
+      { icon: 'stethoscope', title: 'Uzman Doktorlar', desc: 'Alanında uzmanlaşmış hekim kadrosu' },
+      { icon: 'activity', title: 'Modern Klinik', desc: 'En son tıbbi teknoloji ve ekipmanlar' },
+      { icon: 'calendar', title: 'Kolay Randevu', desc: 'Online randevu sistemi, kısa bekleme süresi' },
     ],
   },
 }
@@ -185,128 +214,105 @@ const DEFAULT_THEME = {
   heroTitle: 'Profesyonel Hizmetin Doğru Adresi',
   heroSub: 'Kaliteli hizmet ve müşteri memnuniyeti önceliğimizdir',
   whyUs: [
-    { icon: '⭐', title: 'Uzman Ekip', desc: '10+ yıl deneyimli profesyoneller' },
-    { icon: '🏆', title: 'Kalite', desc: 'Müşteri memnuniyeti garantisi' },
-    { icon: '📞', title: '7/24 Destek', desc: 'Her zaman yanınızdayız' },
+    { icon: 'award', title: 'Uzman Ekip', desc: '10+ yıl deneyimli profesyoneller' },
+    { icon: 'shield', title: 'Kalite', desc: 'Müşteri memnuniyeti garantisi' },
+    { icon: 'phone', title: '7/24 Destek', desc: 'Her zaman yanınızdayız' },
   ],
 }
 
 function getSectorServices(sector: string) {
   const map: Record<string, { icon: string; name: string; desc: string }[]> = {
     dis_klinigi: [
-      { icon: '🦷', name: 'İmplant', desc: 'Kalıcı diş implant tedavisi' },
-      { icon: '😁', name: 'Ortodonti', desc: 'Braces ve şeffaf plak tedavisi' },
-      { icon: '✨', name: 'Estetik Diş', desc: 'Beyazlatma ve porselen veneer' },
-      { icon: '🔬', name: 'Kanal Tedavisi', desc: 'Ağrısız kanal tedavisi' },
-      { icon: '🛡️', name: 'Diş Protezi', desc: 'Tam ve kısmi protez çözümleri' },
-      { icon: '🩺', name: 'Genel Muayene', desc: 'Periyodik kontrol ve temizlik' },
+      { icon: 'stethoscope', name: 'İmplant', desc: 'Kalıcı diş implant tedavisi' },
+      { icon: 'smile', name: 'Ortodonti', desc: 'Braces ve şeffaf plak tedavisi' },
+      { icon: 'sparkles', name: 'Estetik Diş', desc: 'Beyazlatma ve porselen veneer' },
+      { icon: 'microscope', name: 'Kanal Tedavisi', desc: 'Ağrısız kanal tedavisi' },
+      { icon: 'shield', name: 'Diş Protezi', desc: 'Tam ve kısmi protez çözümleri' },
+      { icon: 'calendar', name: 'Genel Muayene', desc: 'Periyodik kontrol ve temizlik' },
     ],
     restoran: [
-      { icon: '🍽️', name: 'Ana Yemekler', desc: 'Geleneksel Türk mutfağı lezzetleri' },
-      { icon: '🥗', name: 'Salatalar', desc: 'Taze ve sağlıklı salata seçenekleri' },
-      { icon: '🎂', name: 'Tatlılar', desc: 'El yapımı geleneksel tatlılar' },
-      { icon: '🍷', name: 'İçecekler', desc: 'Geniş içecek ve şerbet menüsü' },
-      { icon: '🎉', name: 'Özel Etkinlik', desc: 'Düğün, nişan ve organizasyon' },
-      { icon: '🚚', name: 'Paket Servis', desc: 'Hızlı ve sıcak teslimat' },
+      { icon: 'chef', name: 'Ana Yemekler', desc: 'Geleneksel Türk mutfağı lezzetleri' },
+      { icon: 'leaf', name: 'Salatalar', desc: 'Taze ve sağlıklı salata seçenekleri' },
+      { icon: 'sparkles', name: 'Tatlılar', desc: 'El yapımı geleneksel tatlılar' },
+      { icon: 'coffee', name: 'İçecekler', desc: 'Geniş içecek ve şerbet menüsü' },
+      { icon: 'award', name: 'Özel Etkinlik', desc: 'Düğün, nişan ve organizasyon' },
+      { icon: 'truck', name: 'Paket Servis', desc: 'Hızlı ve sıcak teslimat' },
     ],
     avukat: [
-      { icon: '⚖️', name: 'Ceza Hukuku', desc: 'Profesyonel ceza savunması' },
-      { icon: '🏠', name: 'Gayrimenkul', desc: 'Tapu ve kira uyuşmazlıkları' },
-      { icon: '💼', name: 'Şirket Hukuku', desc: 'Kurumsal hukuki danışmanlık' },
-      { icon: '👨‍👩‍👧', name: 'Aile Hukuku', desc: 'Boşanma ve velayet davaları' },
-      { icon: '🚗', name: 'Trafik Hukuku', desc: 'Kaza tazminat davaları' },
-      { icon: '📋', name: 'Sözleşme', desc: 'Sözleşme hazırlama ve inceleme' },
+      { icon: 'scale', name: 'Ceza Hukuku', desc: 'Profesyonel ceza savunması' },
+      { icon: 'home', name: 'Gayrimenkul', desc: 'Tapu ve kira uyuşmazlıkları' },
+      { icon: 'briefcase', name: 'Şirket Hukuku', desc: 'Kurumsal hukuki danışmanlık' },
+      { icon: 'users', name: 'Aile Hukuku', desc: 'Boşanma ve velayet davaları' },
+      { icon: 'car', name: 'Trafik Hukuku', desc: 'Kaza tazminat davaları' },
+      { icon: 'doc', name: 'Sözleşme', desc: 'Sözleşme hazırlama ve inceleme' },
     ],
     guzellik_salonu: [
-      { icon: '💇', name: 'Saç Tasarımı', desc: 'Kesim, boyama ve şekillendirme' },
-      { icon: '💅', name: 'Manikür & Pedikür', desc: 'El ve ayak bakımı' },
-      { icon: '✨', name: 'Cilt Bakımı', desc: 'Profesyonel cilt tedavileri' },
-      { icon: '👁️', name: 'Kaş & Kirpik', desc: 'Kalıcı makyaj uygulamaları' },
-      { icon: '🧖', name: 'Masaj & SPA', desc: 'Rahatlatıcı masaj seansları' },
-      { icon: '💄', name: 'Gelin Paketi', desc: 'Düğün öncesi özel paket' },
+      { icon: 'scissors', name: 'Saç Tasarımı', desc: 'Kesim, boyama ve şekillendirme' },
+      { icon: 'sparkles', name: 'Manikür & Pedikür', desc: 'El ve ayak bakımı' },
+      { icon: 'heart', name: 'Cilt Bakımı', desc: 'Profesyonel cilt tedavileri' },
+      { icon: 'camera', name: 'Kaş & Kirpik', desc: 'Kalıcı makyaj uygulamaları' },
+      { icon: 'award', name: 'Masaj & SPA', desc: 'Rahatlatıcı masaj seansları' },
+      { icon: 'star', name: 'Gelin Paketi', desc: 'Düğün öncesi özel paket' },
     ],
     insaat: [
-      { icon: '🏗️', name: 'Konut İnşaatı', desc: 'Anahtar teslim ev yapımı' },
-      { icon: '🏢', name: 'Ticari Yapılar', desc: 'Ofis ve mağaza inşaatı' },
-      { icon: '🔨', name: 'Tadilat', desc: 'İç mekan yenileme hizmetleri' },
-      { icon: '🪟', name: 'Çatı & Cephe', desc: 'Mantolama ve çatı işleri' },
-      { icon: '🔧', name: 'Tesisat', desc: 'Su, elektrik, doğalgaz tesisatı' },
-      { icon: '📐', name: 'Mimari Proje', desc: 'Ruhsat ve proje çizimi' },
+      { icon: 'home', name: 'Konut İnşaatı', desc: 'Anahtar teslim ev yapımı' },
+      { icon: 'building', name: 'Ticari Yapılar', desc: 'Ofis ve mağaza inşaatı' },
+      { icon: 'wrench', name: 'Tadilat', desc: 'İç mekan yenileme hizmetleri' },
+      { icon: 'hardhat', name: 'Çatı & Cephe', desc: 'Mantolama ve çatı işleri' },
+      { icon: 'zap', name: 'Tesisat', desc: 'Su, elektrik, doğalgaz tesisatı' },
+      { icon: 'doc', name: 'Mimari Proje', desc: 'Ruhsat ve proje çizimi' },
     ],
     oto_galeri: [
-      { icon: '🚗', name: '2. El Araçlar', desc: 'Garantili ikinci el satış' },
-      { icon: '🆕', name: 'Sıfır Araçlar', desc: 'Tüm marka ve modeller' },
-      { icon: '🔄', name: 'Takas', desc: 'Araç takası yapılır' },
-      { icon: '💳', name: 'Kredi', desc: 'Uygun faizli araç kredisi' },
-      { icon: '🔧', name: 'Servis', desc: 'Periyodik bakım hizmetleri' },
-      { icon: '📋', name: 'Ekspertiz', desc: 'Güvenilir ekspertiz raporu' },
+      { icon: 'car', name: '2. El Araçlar', desc: 'Garantili ikinci el satış' },
+      { icon: 'sparkles', name: 'Sıfır Araçlar', desc: 'Tüm marka ve modeller' },
+      { icon: 'award', name: 'Takas', desc: 'Araç takası yapılır' },
+      { icon: 'credit', name: 'Kredi', desc: 'Uygun faizli araç kredisi' },
+      { icon: 'wrench', name: 'Servis', desc: 'Periyodik bakım hizmetleri' },
+      { icon: 'search', name: 'Ekspertiz', desc: 'Güvenilir ekspertiz raporu' },
     ],
     otel: [
-      { icon: '🛏️', name: 'Standart Oda', desc: 'Konforlu konaklama seçeneği' },
-      { icon: '👑', name: 'Suite Oda', desc: 'Lüks suite odalarımız' },
-      { icon: '🍳', name: 'Kahvaltı', desc: 'Açık büfe Türk kahvaltısı' },
-      { icon: '🏊', name: 'Havuz & SPA', desc: 'Kapalı ve açık havuz' },
-      { icon: '🎉', name: 'Organizasyon', desc: 'Düğün ve toplantı salonları' },
-      { icon: '🚗', name: 'Transfer', desc: 'Havalimanı transfer hizmeti' },
+      { icon: 'bed', name: 'Standart Oda', desc: 'Konforlu konaklama seçeneği' },
+      { icon: 'star', name: 'Suite Oda', desc: 'Lüks suite odalarımız' },
+      { icon: 'coffee', name: 'Kahvaltı', desc: 'Açık büfe Türk kahvaltısı' },
+      { icon: 'sparkles', name: 'Havuz & SPA', desc: 'Kapalı ve açık havuz' },
+      { icon: 'award', name: 'Organizasyon', desc: 'Düğün ve toplantı salonları' },
+      { icon: 'car', name: 'Transfer', desc: 'Havalimanı transfer hizmeti' },
     ],
     veteriner: [
-      { icon: '🐶', name: 'Genel Muayene', desc: 'Köpek ve kedi muayenesi' },
-      { icon: '💉', name: 'Aşılama', desc: 'Rutin aşı programları' },
-      { icon: '🔬', name: 'Laboratuvar', desc: 'Kan ve idrar tahlili' },
-      { icon: '🦷', name: 'Diş Bakımı', desc: 'Veteriner diş tedavisi' },
-      { icon: '🏥', name: 'Ameliyat', desc: 'Modern cerrahi ekipman' },
-      { icon: '🛁', name: 'Grooming', desc: 'Tıraş ve banyo hizmeti' },
+      { icon: 'paw', name: 'Genel Muayene', desc: 'Köpek ve kedi muayenesi' },
+      { icon: 'syringe', name: 'Aşılama', desc: 'Rutin aşı programları' },
+      { icon: 'microscope', name: 'Laboratuvar', desc: 'Kan ve idrar tahlili' },
+      { icon: 'stethoscope', name: 'Diş Bakımı', desc: 'Veteriner diş tedavisi' },
+      { icon: 'activity', name: 'Ameliyat', desc: 'Modern cerrahi ekipman' },
+      { icon: 'scissors', name: 'Grooming', desc: 'Tıraş ve banyo hizmeti' },
     ],
     muhasebe: [
-      { icon: '📊', name: 'Muhasebe', desc: 'Aylık muhasebe hizmetleri' },
-      { icon: '📋', name: 'Vergi Beyanı', desc: 'KDV ve gelir vergisi beyanı' },
-      { icon: '💼', name: 'Şirket Kuruluşu', desc: 'Hızlı şirket kuruluş hizmeti' },
-      { icon: '💰', name: 'Bordro', desc: 'SGK ve bordro işlemleri' },
-      { icon: '🔍', name: 'Denetim', desc: 'Mali müşavirlik ve denetim' },
-      { icon: '📈', name: 'Finansal Analiz', desc: 'İşletme karlılık analizi' },
+      { icon: 'chart', name: 'Muhasebe', desc: 'Aylık muhasebe hizmetleri' },
+      { icon: 'receipt', name: 'Vergi Beyanı', desc: 'KDV ve gelir vergisi beyanı' },
+      { icon: 'briefcase', name: 'Şirket Kuruluşu', desc: 'Hızlı şirket kuruluş hizmeti' },
+      { icon: 'doc', name: 'Bordro', desc: 'SGK ve bordro işlemleri' },
+      { icon: 'search', name: 'Denetim', desc: 'Mali müşavirlik ve denetim' },
+      { icon: 'chart', name: 'Finansal Analiz', desc: 'İşletme karlılık analizi' },
     ],
     saglik: [
-      { icon: '🩺', name: 'Genel Muayene', desc: 'Uzman doktor muayenesi' },
-      { icon: '🔬', name: 'Tahlil', desc: 'Kan ve idrar tahlili' },
-      { icon: '📡', name: 'Görüntüleme', desc: 'Röntgen, USG, MR' },
-      { icon: '💊', name: 'Poliklinik', desc: 'Tüm branşlarda uzman' },
-      { icon: '🏥', name: 'Check-Up', desc: 'Kapsamlı sağlık taraması' },
-      { icon: '🚑', name: 'Acil', desc: '7/24 acil servis hizmeti' },
+      { icon: 'stethoscope', name: 'Genel Muayene', desc: 'Uzman doktor muayenesi' },
+      { icon: 'microscope', name: 'Tahlil', desc: 'Kan ve idrar tahlili' },
+      { icon: 'activity', name: 'Görüntüleme', desc: 'Röntgen, USG, MR' },
+      { icon: 'heart', name: 'Poliklinik', desc: 'Tüm branşlarda uzman' },
+      { icon: 'shield', name: 'Check-Up', desc: 'Kapsamlı sağlık taraması' },
+      { icon: 'zap', name: 'Acil', desc: '7/24 acil servis hizmeti' },
     ],
   }
   return map[sector] || [
-    { icon: '✅', name: 'Hizmet 1', desc: 'Profesyonel çözümler' },
-    { icon: '🎯', name: 'Hizmet 2', desc: 'Müşteri odaklı yaklaşım' },
-    { icon: '💎', name: 'Hizmet 3', desc: 'Kaliteli ve güvenilir' },
-    { icon: '🚀', name: 'Hizmet 4', desc: 'Hızlı ve etkili' },
-    { icon: '🌟', name: 'Hizmet 5', desc: '7/24 destek' },
-    { icon: '🤝', name: 'Hizmet 6', desc: 'Güvenilir ortaklık' },
+    { icon: 'check', name: 'Hizmetlerimiz', desc: 'Profesyonel çözümler' },
+    { icon: 'award', name: 'Kalite', desc: 'Müşteri odaklı yaklaşım' },
+    { icon: 'shield', name: 'Güvenilirlik', desc: 'Kaliteli ve güvenilir' },
+    { icon: 'zap', name: 'Hız', desc: 'Hızlı ve etkili hizmet' },
+    { icon: 'clock', name: '7/24 Destek', desc: 'Her zaman yanınızdayız' },
+    { icon: 'users', name: 'Ekibimiz', desc: 'Uzman kadromuzla hizmetinizdeyiz' },
   ]
 }
 
-const SECTOR_REVIEWS: Record<string, { name: string; text: string }[]> = {
-  dis_klinigi: [
-    { name: 'Ayşe K.', text: 'İmplant tedavisinde hiç ağrı hissetmedim. Doktorumuz çok ilgili ve sabırlıydı. Kesinlikle tavsiye ederim.' },
-    { name: 'Mehmet T.', text: 'Çocuğumun ortodonti tedavisini burada yaptırdık. Sonuç mükemmel, hem profesyonel hem de güler yüzlüler.' },
-    { name: 'Fatma Y.', text: 'Diş beyazlatma işlemi sonrası gülüşüm değişti! Çok memnun kaldım, fiyatlar da uygun.' },
-  ],
-  restoran: [
-    { name: 'Ali B.', text: 'Kuzu tandır muhteşemdi. Servis hızlı, mekan temiz ve fiyatlar makul. Ailece gelmeye devam edeceğiz.' },
-    { name: 'Zeynep A.', text: 'Doğum günü organizasyonu için tercih ettik. Her şey kusursuzdu, şefleri gerçekten usta.' },
-    { name: 'Hasan D.', text: 'İstanbul\'un en iyi meze tabağını burada yedim. Ev yapımı tatlılar da harika.' },
-  ],
-  avukat: [
-    { name: 'Murat Ö.', text: 'İş davamda çok profesyonel yaklaştılar. Süreci adım adım anlattılar, sonuç olumlu çıktı.' },
-    { name: 'Selin K.', text: 'Gayrimenkul satışımda hukuki destek aldım. Hızlı ve güvenilir hizmet, teşekkürler.' },
-    { name: 'Burak Y.', text: 'Şirket kuruluşumda tüm işlemleri onlar halletti. Çok pratik ve zamanında sonuç.' },
-  ],
-}
-
-const DEFAULT_REVIEWS = [
-  { name: 'Ahmet Y.', text: 'Çok memnun kaldım, herkese tavsiye ederim. Profesyonel ve güler yüzlü hizmet.' },
-  { name: 'Elif S.', text: 'Kaliteli hizmet ve uygun fiyat. Bir dahaki seferde yine tercihim bu olacak.' },
-  { name: 'Kemal B.', text: 'İlk gelişimde çok iyi karşılandım. Ekip gerçekten uzman ve çözüm odaklı.' },
-]
 
 export default function DemoPage() {
   const { token } = useParams()
@@ -371,7 +377,6 @@ export default function DemoPage() {
       })
     : null
   const services = realServices || getSectorServices(sector)
-  const reviews = SECTOR_REVIEWS[sector] || DEFAULT_REVIEWS
   const phone = lead.phone || analysis.extracted_phone
   const address = analysis.address_text || (lead.city + (lead.district ? `, ${lead.district}` : ''))
   const expiresAt = new Date(data.report.demo_expires_at)
@@ -466,8 +471,21 @@ export default function DemoPage() {
       </header>
 
       {/* Hero Section */}
-      <section className={`bg-gradient-to-br ${theme.gradient} text-white py-20 px-6`}>
-        <div className="max-w-4xl mx-auto text-center">
+      <section
+        className="text-white py-20 px-6 relative overflow-hidden"
+        style={
+          analysis.gallery_images?.[0]
+            ? { backgroundImage: `url(${analysis.gallery_images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : { background: `linear-gradient(135deg, var(--tw-gradient-stops))` }
+        }
+      >
+        {analysis.gallery_images?.[0] && (
+          <div className="absolute inset-0 bg-black/60" />
+        )}
+        {!analysis.gallery_images?.[0] && (
+          <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient}`} />
+        )}
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
             {lead.name}
           </h1>
@@ -516,7 +534,9 @@ export default function DemoPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all group">
-                <div className="text-4xl mb-4">{service.icon}</div>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: theme.light }}>
+                  <SvcIcon name={service.icon} className="w-6 h-6" style={{ color: theme.primary }} />
+                </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">{service.name}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{service.desc}</p>
                 <div className="mt-4 flex items-center gap-1 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all" style={{ color: theme.primary }}>
@@ -560,7 +580,9 @@ export default function DemoPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {theme.whyUs.map((item, i) => (
               <div key={i} className="text-center p-8 rounded-2xl border border-gray-100 hover:border-gray-200 transition-all">
-                <div className="text-5xl mb-4">{item.icon}</div>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: theme.light }}>
+                  <SvcIcon name={item.icon} className="w-7 h-7" style={{ color: theme.primary }} />
+                </div>
                 <h3 className="font-bold text-gray-900 text-xl mb-3">{item.title}</h3>
                 <p className="text-gray-500 leading-relaxed">{item.desc}</p>
               </div>
@@ -579,33 +601,63 @@ export default function DemoPage() {
         </div>
       </section>
 
-      {/* Müşteri Yorumları */}
-      <section className="py-20 px-6" style={{ background: theme.light }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Müşterilerimiz Ne Diyor?</h2>
-            <p className="text-gray-500">Memnun müşterilerimizin deneyimleri</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {reviews.map((review, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <div className="flex gap-1 mb-3">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+      {/* Google Yorumları — sadece gerçek veri varsa */}
+      {lead.google_rating && lead.google_review_count && (
+        <section className="py-16 px-6" style={{ background: theme.light }}>
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Müşteri Memnuniyeti</h2>
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 inline-block">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="flex gap-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={`w-6 h-6 ${i < Math.round(lead.google_rating!) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200 fill-gray-200'}`} />
                   ))}
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">&ldquo;{review.text}&rdquo;</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: theme.primary }}>
-                    {review.name.charAt(0)}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-700">{review.name}</span>
-                </div>
+                <span className="text-3xl font-extrabold text-gray-900">{lead.google_rating}</span>
               </div>
-            ))}
+              <p className="text-gray-500 text-sm mb-4">Google üzerinde <strong className="text-gray-700">{lead.google_review_count}+ müşteri yorumu</strong></p>
+              <a
+                href={`https://www.google.com/search?q=${encodeURIComponent(lead.name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg border transition-all hover:opacity-80"
+                style={{ color: theme.primary, borderColor: theme.primary }}
+              >
+                <ExternalLink className="w-4 h-4" /> Tüm yorumları Google&apos;da gör
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Fotoğraf Galerisi — sadece gerçek görseller varsa */}
+      {analysis.gallery_images && analysis.gallery_images.length >= 2 && (
+        <section className="py-16 px-6 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-extrabold text-gray-900">
+                {sector === 'dis_klinigi' ? 'Kliniğimizden' :
+                 sector === 'restoran' ? 'Restoranımızdan' :
+                 sector === 'insaat' ? 'Projelerimizden' :
+                 sector === 'guzellik_salonu' ? 'Salonumuzdan' :
+                 'Galeri'}
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {analysis.gallery_images.slice(0, 4).map((url, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={i}
+                  src={url}
+                  alt={`${lead.name} - ${i + 1}`}
+                  className="w-full h-48 object-cover rounded-2xl shadow-sm"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* İletişim */}
       <section id="iletisim" className="py-20 px-6 bg-white">
@@ -678,17 +730,19 @@ export default function DemoPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { icon: '📱', title: 'Mobil Uyumlu Tasarım', desc: 'Her ekran boyutunda mükemmel görünüm' },
-              { icon: '⚡', title: 'Hızlı Yükleme', desc: 'Optimize edilmiş kod ve görseller' },
-              { icon: '🔍', title: 'SEO Optimizasyonu', desc: 'Google\'da üst sıralara çıkacak yapı' },
-              { icon: '💬', title: 'WhatsApp Entegrasyonu', desc: 'Müşteriler tek tuşla ulaşabilir' },
-              { icon: '📋', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
-              { icon: '🔒', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
-              { icon: '📊', title: 'Google Analytics', desc: 'Ziyaretçi takibi ve raporlama' },
-              { icon: '🗺️', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
+              { icon: 'smartphone', title: 'Mobil Uyumlu Tasarım', desc: 'Her ekran boyutunda mükemmel görünüm' },
+              { icon: 'zap', title: 'Hızlı Yükleme', desc: 'Optimize edilmiş kod ve görseller' },
+              { icon: 'search', title: 'SEO Optimizasyonu', desc: 'Google\'da üst sıralara çıkacak yapı' },
+              { icon: 'chat', title: 'WhatsApp Entegrasyonu', desc: 'Müşteriler tek tuşla ulaşabilir' },
+              { icon: 'doc', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
+              { icon: 'lock', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
+              { icon: 'chart', title: 'Google Analytics', desc: 'Ziyaretçi takibi ve raporlama' },
+              { icon: 'globe', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <span className="text-2xl">{item.icon}</span>
+                <div className="w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <SvcIcon name={item.icon} className="w-4 h-4 text-blue-400" />
+                </div>
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="text-green-400 text-xs font-bold">✓ TAMAMLANDI</span>
