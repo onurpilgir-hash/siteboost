@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Link2, ArrowRight, Loader2 } from 'lucide-react'
+import { Search, Link2, ArrowRight, Loader2, Globe } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SECTORS } from '@/types'
 
-type ScanType = 'auto' | 'manual'
+type ScanType = 'auto' | 'manual' | 'websitesiz'
 
 const ISTANBUL_DISTRICTS = [
   'Adalar', 'Arnavutköy', 'Ataşehir', 'Avcılar', 'Bağcılar',
@@ -98,7 +98,7 @@ export default function ScanForm() {
             }`}
           >
             <Search className="w-4 h-4" />
-            Senaryo 1 — Otomatik Tarama
+            Otomatik Tarama
           </button>
           <button
             onClick={() => setScanType('manual')}
@@ -107,7 +107,14 @@ export default function ScanForm() {
             }`}
           >
             <Link2 className="w-4 h-4" />
-            Senaryo 2 — Manuel URL
+            Manuel URL
+          </button>
+          <button
+            onClick={() => router.push('/scan/websitesiz')}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-gray-100 hover:bg-gray-800"
+          >
+            <Globe className="w-4 h-4" />
+            Websitesiz
           </button>
         </div>
 
