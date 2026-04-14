@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
           city: place.city,
           district: place.district || null,
           sector: place.sector,
-          pipeline_stage: 'websitesiz_lead',
+          pipeline_stage: 'new_lead',
         })
         .select('id, name, phone, city, sector')
         .single()

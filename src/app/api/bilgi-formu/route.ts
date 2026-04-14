@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         phone,
         email: email || null,
         website: referenceUrl || null,
-        pipeline_stage: 'bilgi_formu',
+        pipeline_stage: 'new_lead',
       })
       .select('id, name')
       .single()
