@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
+import { Plus_Jakarta_Sans } from 'next/font/google'
+import { motion } from 'framer-motion'
 import {
   Clock, Phone, MapPin, Star, ExternalLink, CheckCircle, ChevronRight,
   Stethoscope, Sparkles, Shield, Calendar, Heart, Award, Zap, Users,
@@ -11,6 +13,9 @@ import {
   Smartphone, Search, Lock, MessageCircle, FileText, Globe, Laptop,
   type LucideIcon
 } from 'lucide-react'
+
+const font = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'] })
+
 const ICON_MAP: Record<string, LucideIcon> = {
   stethoscope: Stethoscope, sparkles: Sparkles, shield: Shield,
   calendar: Calendar, heart: Heart, award: Award, zap: Zap,
@@ -29,6 +34,55 @@ const ICON_MAP: Record<string, LucideIcon> = {
 function SvcIcon({ name, className, style }: { name: string; className?: string; style?: { color?: string; [key: string]: unknown } }) {
   const Icon = ICON_MAP[name] || CheckCircle
   return <Icon className={className} style={style} />
+}
+
+// Sektöre göre Unsplash CDN fotoğrafları — API key gerekmez
+const SECTOR_PHOTOS: Record<string, { hero: string; services: string }> = {
+  dis_klinigi: {
+    hero: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=1200&q=80',
+  },
+  restoran: {
+    hero: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80',
+  },
+  avukat: {
+    hero: 'https://images.unsplash.com/photo-1589391886645-d51941baf7fb?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200&q=80',
+  },
+  guzellik_salonu: {
+    hero: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80',
+  },
+  insaat: {
+    hero: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80',
+  },
+  oto_galeri: {
+    hero: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=80',
+  },
+  otel: {
+    hero: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80',
+  },
+  veteriner: {
+    hero: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=1200&q=80',
+  },
+  muhasebe: {
+    hero: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80',
+  },
+  saglik: {
+    hero: 'https://images.unsplash.com/photo-1551076805-e1869033e561?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=1200&q=80',
+  },
+}
+
+const DEFAULT_PHOTO = {
+  hero: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85',
+  services: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&q=80',
 }
 
 interface DemoData {
@@ -311,6 +365,15 @@ function getSectorServices(sector: string) {
   ]
 }
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
+}
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+}
 
 export default function DemoPage() {
   const { token } = useParams()
@@ -332,7 +395,7 @@ export default function DemoPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className={`${font.className} min-h-screen flex items-center justify-center bg-white`}>
         <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -340,7 +403,7 @@ export default function DemoPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className={`${font.className} min-h-screen flex items-center justify-center bg-white`}>
         <div className="text-center">
           <p className="text-xl font-bold text-gray-800 mb-2">Demo bulunamadı</p>
           <p className="text-gray-500">Link geçersiz veya süresi dolmuş.</p>
@@ -351,13 +414,11 @@ export default function DemoPage() {
 
   if (data.expired) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-8">
+      <div className={`${font.className} min-h-screen flex items-center justify-center bg-gray-50 p-8`}>
         <div className="max-w-md text-center bg-white rounded-2xl shadow-lg p-8">
           <Clock className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Demo Süresi Doldu</h2>
-          <p className="text-gray-500 mb-6">
-            {data.lead.name} için hazırladığımız demo süresi sona erdi.
-          </p>
+          <p className="text-gray-500 mb-6">{data.lead.name} için hazırladığımız demo süresi sona erdi.</p>
           <p className="text-gray-500 text-sm">Yeni bir demo için {data.brand_name} ile iletişime geçin.</p>
         </div>
       </div>
@@ -365,10 +426,14 @@ export default function DemoPage() {
   }
 
   const { lead } = data
-  const analysis = data.analysis || {}  // null-safe: sıfırdan demolar için analiz olmayabilir
+  const analysis = data.analysis || {}
   const sector = lead.sector || 'genel'
   const theme = SECTOR_THEMES[sector] || DEFAULT_THEME
-  // Gerçek hizmetler varsa kullan, yoksa sektör şablonuna dön
+  const photos = SECTOR_PHOTOS[sector] || DEFAULT_PHOTO
+
+  // Gerçek fotoğraf varsa (gallery_images) onu kullan, yoksa Unsplash
+  const heroBg = analysis.gallery_images?.[0] || photos.hero
+
   const realServices = analysis.extracted_services && analysis.extracted_services.length >= 3
     ? analysis.extracted_services.slice(0, 6).map((name: string, i: number) => {
         const template = getSectorServices(sector)[i]
@@ -382,18 +447,16 @@ export default function DemoPage() {
   const daysLeft = Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / 86400000))
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className={`${font.className} min-h-screen bg-white text-gray-900`}>
 
-      {/* Demo Bandı — üstte */}
+      {/* Demo Bandı */}
       <div className="bg-gray-950 text-white px-4 py-2.5 flex items-center justify-between text-xs border-b border-gray-800">
         <div className="flex items-center gap-3">
-          {/* Eski site butonu */}
           <a
             href={lead.website}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all font-medium"
-            title="Mevcut sitenizi yeni sekmede açar"
           >
             ← Eski siteniz
           </a>
@@ -409,19 +472,16 @@ export default function DemoPage() {
           onClick={requestPrice}
           disabled={priceSent}
           className={`text-xs font-semibold px-4 py-1.5 rounded-lg transition-all whitespace-nowrap ${
-            priceSent
-              ? 'bg-green-800 text-green-300 cursor-default'
-              : 'bg-blue-600 hover:bg-blue-500 text-white'
+            priceSent ? 'bg-green-800 text-green-300 cursor-default' : 'bg-blue-600 hover:bg-blue-500 text-white'
           }`}
         >
           {priceSent ? '✓ Talebiniz Alındı' : '💡 Fiyat İstiyorum'}
         </button>
       </div>
 
-      {/* Navbar */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+      {/* Sticky Navbar */}
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
           <div className="flex items-center gap-3">
             {analysis.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -430,27 +490,27 @@ export default function DemoPage() {
                 alt={lead.name}
                 className="h-10 w-auto object-contain"
                 onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.style.display = 'none'
-                  target.nextElementSibling?.classList.remove('hidden')
+                  const t = e.target as HTMLImageElement
+                  t.style.display = 'none'
+                  t.nextElementSibling?.classList.remove('hidden')
                 }}
               />
             ) : null}
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg ${analysis.logo_url ? 'hidden' : ''}`}
-              style={{ background: theme.primary }}>
+            <div
+              className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg ${analysis.logo_url ? 'hidden' : ''}`}
+              style={{ background: theme.primary }}
+            >
               {lead.name.charAt(0).toUpperCase()}
             </div>
             <span className="font-bold text-gray-900 text-lg hidden sm:block">{lead.name}</span>
           </div>
 
-          {/* Nav linkleri */}
-          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-600">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
             <a href="#hizmetler" className="hover:text-gray-900 transition-colors">Hizmetler</a>
             <a href="#neden-biz" className="hover:text-gray-900 transition-colors">Neden Biz?</a>
             <a href="#iletisim" className="hover:text-gray-900 transition-colors">İletişim</a>
           </nav>
 
-          {/* CTA */}
           <div className="flex items-center gap-3">
             {phone && (
               <a href={`tel:${phone}`} className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -460,7 +520,7 @@ export default function DemoPage() {
             )}
             <a
               href="#iletisim"
-              className="text-sm font-semibold px-4 py-2 rounded-lg text-white transition-all hover:opacity-90"
+              className="text-sm font-bold px-5 py-2.5 rounded-xl text-white transition-all hover:opacity-90 shadow-sm"
               style={{ background: theme.primary }}
             >
               {theme.cta}
@@ -469,303 +529,450 @@ export default function DemoPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero — tam ekran fotoğraflı */}
       <section
-        className="text-white py-20 px-6 relative overflow-hidden"
-        style={
-          analysis.gallery_images?.[0]
-            ? { backgroundImage: `url(${analysis.gallery_images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-            : { background: `linear-gradient(135deg, var(--tw-gradient-stops))` }
-        }
+        className="relative min-h-screen flex items-center justify-center text-white overflow-hidden"
+        style={{ backgroundImage: `url(${heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
-        {analysis.gallery_images?.[0] && (
-          <div className="absolute inset-0 bg-black/60" />
-        )}
-        {!analysis.gallery_images?.[0] && (
-          <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient}`} />
-        )}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
-            {lead.name}
-          </h1>
-          <p className="text-xl md:text-2xl font-medium opacity-90 mb-3">
-            {theme.heroTitle}
-          </p>
-          <p className="text-base opacity-75 mb-8 max-w-2xl mx-auto">
-            {theme.heroSub} — {lead.city}{lead.district ? ` / ${lead.district}` : ''}
-            {analysis.founding_year ? ` • ${analysis.founding_year}\u2019den beri hizmetinizdeyiz` : ''}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#iletisim"
-              className="bg-white font-bold px-8 py-3 rounded-xl text-base hover:opacity-90 transition-all shadow-lg"
-              style={{ color: theme.primary }}
-            >
-              {theme.cta} →
-            </a>
-            <a
-              href="#hizmetler"
-              className="border-2 border-white text-white font-semibold px-8 py-3 rounded-xl text-base hover:bg-white/10 transition-all"
-            >
-              Hizmetlerimiz
-            </a>
-          </div>
-          {lead.google_rating && (
-            <div className="mt-8 flex items-center justify-center gap-2 text-sm opacity-75">
-              <div className="flex">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={`w-4 h-4 ${i < Math.round(lead.google_rating!) ? 'fill-yellow-300 text-yellow-300' : 'text-white/30'}`} />
-                ))}
-              </div>
-              <span>{lead.google_rating} / 5 • {lead.google_review_count || 0}+ yorum</span>
+        {/* Koyu overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            <p className="text-sm font-semibold uppercase tracking-widest mb-4 opacity-80"
+               style={{ color: 'rgba(255,255,255,0.7)' }}>
+              {lead.city}{lead.district ? ` / ${lead.district}` : ''}
+              {analysis.founding_year ? ` • ${analysis.founding_year}'den beri` : ''}
+            </p>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-tight tracking-tight">
+              {lead.name}
+            </h1>
+            <p className="text-xl md:text-2xl font-semibold opacity-90 mb-3">
+              {theme.heroTitle}
+            </p>
+            <p className="text-base md:text-lg opacity-70 mb-10 max-w-2xl mx-auto leading-relaxed">
+              {theme.heroSub}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#iletisim"
+                className="bg-white font-bold px-9 py-4 rounded-2xl text-base hover:opacity-90 transition-all shadow-xl"
+                style={{ color: theme.primary }}
+              >
+                {theme.cta} →
+              </a>
+              <a
+                href="#hizmetler"
+                className="border-2 border-white/70 text-white font-semibold px-9 py-4 rounded-2xl text-base hover:bg-white/10 transition-all"
+              >
+                Hizmetlerimiz
+              </a>
             </div>
-          )}
+
+            {lead.google_rating && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="mt-10 flex items-center justify-center gap-2 text-sm opacity-80"
+              >
+                <div className="flex">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < Math.round(lead.google_rating!) ? 'fill-yellow-300 text-yellow-300' : 'text-white/30'}`} />
+                  ))}
+                </div>
+                <span className="font-semibold">{lead.google_rating} / 5</span>
+                <span className="opacity-60">• {lead.google_review_count || 0}+ Google yorumu</span>
+              </motion.div>
+            )}
+          </motion.div>
         </div>
+
+        {/* Aşağı kaydır göstergesi */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8 }}
+        >
+          <div className="w-6 h-10 rounded-full border-2 border-white/40 flex items-start justify-center pt-2">
+            <div className="w-1 h-2 bg-white/60 rounded-full" />
+          </div>
+        </motion.div>
       </section>
 
       {/* Hizmetler */}
-      <section id="hizmetler" className="py-20 px-6" style={{ background: theme.light }}>
+      <section id="hizmetler" className="py-24 px-6" style={{ background: theme.light }}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Hizmetlerimiz</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Uzman ekibimizle sunduğumuz profesyonel hizmetler</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div
+            className="text-center mb-14"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>
+              Ne Yapıyoruz?
+            </span>
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Hizmetlerimiz</h2>
+            <p className="text-gray-500 max-w-xl mx-auto text-lg">Uzman ekibimizle sunduğumuz profesyonel hizmetler</p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
             {services.map((service, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all group">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: theme.light }}>
-                  <SvcIcon name={service.icon} className="w-6 h-6" style={{ color: theme.primary }} />
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-default"
+              >
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
+                  style={{ background: theme.light }}
+                >
+                  <SvcIcon name={service.icon} className="w-7 h-7" style={{ color: theme.primary }} />
                 </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">{service.name}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{service.desc}</p>
-                <div className="mt-4 flex items-center gap-1 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all" style={{ color: theme.primary }}>
+                <div className="mt-5 flex items-center gap-1 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all" style={{ color: theme.primary }}>
                   Detaylı bilgi <ChevronRight className="w-4 h-4" />
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Hakkımızda — sadece gerçek içerik varsa göster */}
+      {/* Hakkımızda — sadece gerçek içerik varsa */}
       {analysis.about_text && (
-        <section className="py-16 px-6 bg-white">
-          <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-center">
-            <div className="flex-1">
-              <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>Hakkımızda</span>
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-4">{lead.name}</h2>
-              <p className="text-gray-600 leading-relaxed">{analysis.about_text}</p>
-              {analysis.founding_year && (
-                <p className="mt-4 text-sm font-semibold" style={{ color: theme.primary }}>
-                  {analysis.founding_year}&apos;den beri hizmetinizdeyiz
-                </p>
-              )}
-            </div>
-            <div className="w-32 h-32 rounded-2xl flex items-center justify-center text-white text-5xl font-extrabold flex-shrink-0"
-              style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.primary}99)` }}>
-              {lead.name.charAt(0)}
-            </div>
+        <section className="py-24 px-6 bg-white">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              className="flex flex-col md:flex-row gap-12 items-center"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+            >
+              <div className="flex-1">
+                <span className="text-xs font-bold uppercase tracking-widest mb-4 block" style={{ color: theme.primary }}>
+                  Hakkımızda
+                </span>
+                <h2 className="text-3xl font-extrabold text-gray-900 mb-5 tracking-tight">{lead.name}</h2>
+                <p className="text-gray-600 leading-relaxed text-lg">{analysis.about_text}</p>
+                {analysis.founding_year && (
+                  <p className="mt-5 text-sm font-bold" style={{ color: theme.primary }}>
+                    {analysis.founding_year}&apos;den beri hizmetinizdeyiz
+                  </p>
+                )}
+              </div>
+              <div
+                className="w-40 h-40 rounded-3xl flex items-center justify-center text-white text-6xl font-extrabold flex-shrink-0 shadow-xl"
+                style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.primary}99)` }}
+              >
+                {lead.name.charAt(0)}
+              </div>
+            </motion.div>
           </div>
         </section>
       )}
 
-      {/* Neden Biz */}
-      <section id="neden-biz" className="py-20 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Neden Bizi Seçmelisiniz?</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Müşterilerimiz neden bize güveniyor?</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {theme.whyUs.map((item, i) => (
-              <div key={i} className="text-center p-8 rounded-2xl border border-gray-100 hover:border-gray-200 transition-all">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: theme.light }}>
-                  <SvcIcon name={item.icon} className="w-7 h-7" style={{ color: theme.primary }} />
-                </div>
-                <h3 className="font-bold text-gray-900 text-xl mb-3">{item.title}</h3>
-                <p className="text-gray-500 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* Neden Biz — fotoğraf arka planıyla */}
+      <section
+        id="neden-biz"
+        className="py-24 px-6 relative overflow-hidden"
+        style={{ backgroundImage: `url(${photos.services})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm" />
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-14"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>
+              Fark Yaratan Özellikler
+            </span>
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Neden Bizi Seçmelisiniz?</h2>
+            <p className="text-gray-500 max-w-xl mx-auto text-lg">Müşterilerimiz neden bize güveniyor?</p>
+          </motion.div>
 
-          {/* Özellikler listesi */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
+            {theme.whyUs.map((item, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                className="text-center p-10 rounded-3xl bg-white shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm"
+                  style={{ background: theme.light }}
+                >
+                  <SvcIcon name={item.icon} className="w-8 h-8" style={{ color: theme.primary }} />
+                </div>
+                <h3 className="font-extrabold text-gray-900 text-xl mb-3">{item.title}</h3>
+                <p className="text-gray-500 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
             {['Uzman Kadro', 'Güvenilir Hizmet', 'Uygun Fiyat', 'Müşteri Memnuniyeti'].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+              <motion.div key={i} variants={fadeUp} className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: theme.primary }} />
                 <span>{item}</span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Google Yorumları — sadece gerçek veri varsa */}
+      {/* Google Yorumları */}
       {lead.google_rating && lead.google_review_count && (
-        <section className="py-16 px-6" style={{ background: theme.light }}>
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Müşteri Memnuniyeti</h2>
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 inline-block">
+        <section className="py-20 px-6 bg-white">
+          <motion.div
+            className="max-w-2xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>
+              Müşteri Memnuniyeti
+            </span>
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-8 tracking-tight">Google Yorumları</h2>
+            <div className="bg-gray-50 rounded-3xl p-10 shadow-sm border border-gray-100 inline-block w-full">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <div className="flex gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={`w-6 h-6 ${i < Math.round(lead.google_rating!) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200 fill-gray-200'}`} />
+                    <Star key={i} className={`w-7 h-7 ${i < Math.round(lead.google_rating!) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200 fill-gray-200'}`} />
                   ))}
                 </div>
-                <span className="text-3xl font-extrabold text-gray-900">{lead.google_rating}</span>
+                <span className="text-4xl font-extrabold text-gray-900">{lead.google_rating}</span>
               </div>
-              <p className="text-gray-500 text-sm mb-4">Google üzerinde <strong className="text-gray-700">{lead.google_review_count}+ müşteri yorumu</strong></p>
+              <p className="text-gray-500 mb-6">Google üzerinde <strong className="text-gray-700">{lead.google_review_count}+ müşteri yorumu</strong></p>
               <a
                 href={`https://www.google.com/search?q=${encodeURIComponent(lead.name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg border transition-all hover:opacity-80"
+                className="inline-flex items-center gap-2 text-sm font-bold px-5 py-3 rounded-xl border-2 transition-all hover:opacity-80"
                 style={{ color: theme.primary, borderColor: theme.primary }}
               >
                 <ExternalLink className="w-4 h-4" /> Tüm yorumları Google&apos;da gör
               </a>
             </div>
-          </div>
+          </motion.div>
         </section>
       )}
 
-      {/* Fotoğraf Galerisi — sadece gerçek görseller varsa */}
+      {/* Fotoğraf Galerisi */}
       {analysis.gallery_images && analysis.gallery_images.length >= 2 && (
-        <section className="py-16 px-6 bg-gray-50">
+        <section className="py-20 px-6 bg-gray-50">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-extrabold text-gray-900">
+            <motion.div
+              className="text-center mb-10"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+            >
+              <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
                 {sector === 'dis_klinigi' ? 'Kliniğimizden' :
                  sector === 'restoran' ? 'Restoranımızdan' :
                  sector === 'insaat' ? 'Projelerimizden' :
-                 sector === 'guzellik_salonu' ? 'Salonumuzdan' :
-                 'Galeri'}
+                 sector === 'guzellik_salonu' ? 'Salonumuzdan' : 'Galeri'}
               </h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            </motion.div>
+            <motion.div
+              className="grid grid-cols-2 md:grid-cols-4 gap-3"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={stagger}
+            >
               {analysis.gallery_images.slice(0, 4).map((url, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={i}
-                  src={url}
-                  alt={`${lead.name} - ${i + 1}`}
-                  className="w-full h-48 object-cover rounded-2xl shadow-sm"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                />
+                <motion.div key={i} variants={fadeUp}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt={`${lead.name} - ${i + 1}`}
+                    className="w-full h-52 object-cover rounded-2xl shadow-sm hover:shadow-md transition-all"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
 
       {/* İletişim */}
-      <section id="iletisim" className="py-20 px-6 bg-white">
+      <section id="iletisim" className="py-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Bize Ulaşın</h2>
-            <p className="text-gray-500">Size en kısa sürede dönüş yapacağız</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
+          <motion.div
+            className="text-center mb-14"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>
+              Bize Ulaşın
+            </span>
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Hemen İletişime Geçin</h2>
+            <p className="text-gray-500 text-lg">Size en kısa sürede dönüş yapacağız</p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
+            <motion.div variants={fadeUp} className="space-y-5">
               {phone && (
-                <a href={`tel:${phone}`} className="flex items-center gap-4 p-5 rounded-2xl border border-gray-100 hover:border-gray-200 transition-all group">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0" style={{ background: theme.primary }}>
-                    <Phone className="w-5 h-5" />
+                <a href={`tel:${phone}`} className="flex items-center gap-4 p-5 rounded-2xl border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all group">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-sm" style={{ background: theme.primary }}>
+                    <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 mb-0.5">Telefon</p>
-                    <p className="font-semibold text-gray-900">{phone}</p>
+                    <p className="text-xs text-gray-400 mb-0.5 font-medium">Telefon</p>
+                    <p className="font-bold text-gray-900 text-lg">{phone}</p>
                   </div>
                 </a>
               )}
               <div className="flex items-center gap-4 p-5 rounded-2xl border border-gray-100">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0" style={{ background: theme.primary }}>
-                  <MapPin className="w-5 h-5" />
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-sm" style={{ background: theme.primary }}>
+                  <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Adres</p>
-                  <p className="font-semibold text-gray-900">{address}</p>
+                  <p className="text-xs text-gray-400 mb-0.5 font-medium">Adres</p>
+                  <p className="font-bold text-gray-900">{address}</p>
                 </div>
               </div>
-              <a href={lead.website} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 p-5 rounded-2xl border border-gray-100 hover:border-gray-200 transition-all">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0" style={{ background: theme.primary }}>
-                  <ExternalLink className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Web Sitesi</p>
-                  <p className="font-semibold text-gray-900 text-sm">{lead.website}</p>
-                </div>
-              </a>
-            </div>
+              {lead.website && (
+                <a href={lead.website} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-5 rounded-2xl border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-sm" style={{ background: theme.primary }}>
+                    <ExternalLink className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-0.5 font-medium">Web Sitesi</p>
+                    <p className="font-semibold text-gray-900 text-sm">{lead.website}</p>
+                  </div>
+                </a>
+              )}
+            </motion.div>
 
-            {/* CTA Kartı */}
-            <div className={`bg-gradient-to-br ${theme.gradient} text-white rounded-2xl p-8 flex flex-col justify-center`}>
+            <motion.div
+              variants={fadeUp}
+              className={`bg-gradient-to-br ${theme.gradient} text-white rounded-3xl p-10 flex flex-col justify-center shadow-xl`}
+            >
               <h3 className="text-2xl font-extrabold mb-3">{theme.cta} →</h3>
-              <p className="opacity-80 mb-6 text-sm leading-relaxed">
+              <p className="opacity-80 mb-8 leading-relaxed">
                 Hemen iletişime geçin, en kısa sürede size dönüş yapalım.
               </p>
               {phone && (
                 <a
                   href={`tel:${phone}`}
-                  className="bg-white font-bold px-6 py-3 rounded-xl text-center text-base hover:opacity-90 transition-all"
+                  className="bg-white font-bold px-6 py-4 rounded-2xl text-center text-base hover:opacity-90 transition-all shadow-md"
                   style={{ color: theme.primary }}
                 >
                   📞 {phone}
                 </a>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Yapılan İyileştirmeler */}
-      <section className="py-16 px-6 bg-gray-950 text-white">
+      <section className="py-24 px-6 bg-gray-950 text-white">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
+          <motion.div
+            className="text-center mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
             <span className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-3 block">Bu Demo Sitede Yapılanlar</span>
-            <h2 className="text-2xl font-extrabold mb-2">Eski sitenizde eksik olan her şey tamamlandı</h2>
-            <p className="text-gray-400 text-sm">Analiz raporunuzda tespit edilen sorunlar bu demo sitede çözülmüş olarak gösterilmektedir</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <h2 className="text-3xl font-extrabold mb-3 tracking-tight">Eski sitenizde eksik olan her şey tamamlandı</h2>
+            <p className="text-gray-400">Analiz raporunuzda tespit edilen sorunlar bu demo sitede çözülmüş olarak gösterilmektedir</p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
             {[
               { icon: 'smartphone', title: 'Mobil Uyumlu Tasarım', desc: 'Her ekran boyutunda mükemmel görünüm' },
               { icon: 'zap', title: 'Hızlı Yükleme', desc: 'Optimize edilmiş kod ve görseller' },
-              { icon: 'search', title: 'SEO Optimizasyonu', desc: 'Google\'da üst sıralara çıkacak yapı' },
+              { icon: 'search', title: 'SEO Optimizasyonu', desc: "Google'da üst sıralara çıkacak yapı" },
               { icon: 'chat', title: 'WhatsApp Entegrasyonu', desc: 'Müşteriler tek tuşla ulaşabilir' },
               { icon: 'doc', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
               { icon: 'lock', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
               { icon: 'chart', title: 'Google Analytics', desc: 'Ziyaretçi takibi ve raporlama' },
               { icon: 'globe', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <div className="w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <SvcIcon name={item.icon} className="w-4 h-4 text-blue-400" />
+              <motion.div key={i} variants={fadeUp} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <SvcIcon name={item.icon} className="w-5 h-5 text-blue-400" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-green-400 text-xs font-bold">✓ TAMAMLANDI</span>
-                  </div>
-                  <p className="font-semibold text-white text-sm">{item.title}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{item.desc}</p>
+                  <span className="text-green-400 text-xs font-bold mb-1 block">✓ TAMAMLANDI</span>
+                  <p className="font-bold text-white">{item.title}</p>
+                  <p className="text-gray-500 text-sm mt-0.5">{item.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-          <div className="mt-8 text-center">
+          </motion.div>
+
+          <motion.div
+            className="mt-10 text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
             <button
               onClick={requestPrice}
               disabled={priceSent}
-              className={`text-base font-bold px-8 py-4 rounded-xl transition-all ${
-                priceSent
-                  ? 'bg-green-900 text-green-300 cursor-default'
-                  : 'bg-blue-600 hover:bg-blue-500 text-white'
+              className={`text-base font-bold px-10 py-5 rounded-2xl transition-all shadow-xl ${
+                priceSent ? 'bg-green-900 text-green-300 cursor-default' : 'bg-blue-600 hover:bg-blue-500 text-white'
               }`}
             >
               {priceSent ? '✓ Talebiniz Alındı — Sizi Arayacağız' : '💡 Bu Siteyi Gerçek Yapmak İstiyorum →'}
             </button>
-            <p className="text-gray-500 text-xs mt-3">Ücretsiz danışma • Fiyat teklifi • Bağlayıcı değil</p>
-          </div>
+            <p className="text-gray-500 text-sm mt-4">Ücretsiz danışma • Fiyat teklifi • Bağlayıcı değil</p>
+          </motion.div>
         </div>
       </section>
 
@@ -773,7 +980,7 @@ export default function DemoPage() {
       <footer className="bg-gray-900 text-gray-400 py-8 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <p className="font-semibold text-white">{lead.name}</p>
+            <p className="font-bold text-white">{lead.name}</p>
             <p className="text-sm mt-1">{address}</p>
           </div>
           {phone && (
@@ -783,7 +990,7 @@ export default function DemoPage() {
       </footer>
 
       {/* Sticky Alt CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg px-4 py-3 flex items-center justify-between">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-t border-gray-200 shadow-lg px-4 py-3 flex items-center justify-between">
         <div>
           <p className="text-sm font-bold text-gray-900">Bu sitenin gerçeği olsun mu?</p>
           <p className="text-xs text-gray-500">{data.brand_name} ile profesyonel web sitesi</p>
@@ -791,10 +998,8 @@ export default function DemoPage() {
         <button
           onClick={requestPrice}
           disabled={priceSent}
-          className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-            priceSent
-              ? 'bg-green-100 text-green-700 cursor-default'
-              : 'text-white hover:opacity-90'
+          className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
+            priceSent ? 'bg-green-100 text-green-700 cursor-default' : 'text-white hover:opacity-90'
           }`}
           style={priceSent ? {} : { background: theme.primary }}
         >
