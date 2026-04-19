@@ -24,8 +24,20 @@ export async function POST(req: NextRequest) {
     }
 
     // Analiz et
-    await analyzeSite(lead.website, lead.id)
-    await sendTelegram(notify.analysisComplete(lead.name, 0))
+    const result = await analyzeSite(lead.website, lead.id)
+
+    // İyi siteli firmalar (puan >= 7.5) bizim hedefimiz değil → otomatik arşivle
+    if (result.score >= 7.5) {
+      await supabase
+        .from('leads')
+        .update({
+          is_archived: true,
+          notes: `Otomatik arşivlendi: Kaliteli site (puan: ${result.score.toFixed(1)}/10) — SiteBoost hedef kitlesi değil`,
+        })
+        .eq('id', lead.id)
+    }
+
+    await sendTelegram(notify.analysisComplete(lead.name, result.score))
 
     // Kaç tane kaldı?
     const { count } = await supabase

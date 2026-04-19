@@ -64,13 +64,13 @@ export async function POST(req: NextRequest) {
 
       await supabase.from('leads').insert({
         name: place.name,
-        website: place.website,
+        website: place.website || null,
         phone: place.phone,
         address: place.address,
         city: place.city,
         district: place.district,
         sector: place.sector,
-        has_website: true,
+        has_website: !!(place.website && place.website.trim()),
         pipeline_stage: 'new_lead',
         scan_job_id: job.id,
       })

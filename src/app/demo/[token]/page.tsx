@@ -510,6 +510,9 @@ export default function DemoPage() {
   const [data, setData] = useState<DemoData | null>(null)
   const [loading, setLoading] = useState(true)
   const [priceSent, setPriceSent] = useState(false)
+  const [contactForm, setContactForm] = useState({ name: '', phone: '', message: '' })
+  const [contactSent, setContactSent] = useState(false)
+  const [contactLoading, setContactLoading] = useState(false)
 
   useEffect(() => {
     fetch(`/api/demo/${token}`)
@@ -521,6 +524,18 @@ export default function DemoPage() {
   const requestPrice = async () => {
     await fetch(`/api/demo/${token}/price-request`, { method: 'POST' })
     setPriceSent(true)
+  }
+
+  const submitContact = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setContactLoading(true)
+    await fetch(`/api/demo/${token}/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contactForm),
+    })
+    setContactSent(true)
+    setContactLoading(false)
   }
 
   if (loading) {
@@ -1068,26 +1083,62 @@ export default function DemoPage() {
               )}
             </motion.div>
 
-            <motion.div
-              variants={fadeUp}
-              className={`bg-gradient-to-br ${theme.gradient} text-white rounded-3xl p-10 flex flex-col justify-center shadow-xl`}
-            >
-              <h3 className="text-2xl font-extrabold mb-3">{theme.cta} →</h3>
-              <p className="opacity-80 mb-8 leading-relaxed">
-                Hemen iletişime geçin, en kısa sürede size dönüş yapalım.
-              </p>
-              {phone && (
-                <a
-                  href={`tel:${phone}`}
-                  className="bg-white font-bold px-6 py-4 rounded-2xl text-center text-base hover:opacity-90 transition-all shadow-md"
-                  style={{ color: theme.primary }}
-                >
-                  📞 {phone}
-                </a>
+            <motion.div variants={fadeUp}>
+              {contactSent ? (
+                <div className={`bg-gradient-to-br ${theme.gradient} text-white rounded-3xl p-10 flex flex-col items-center justify-center text-center shadow-xl h-full`}>
+                  <div className="text-5xl mb-4">✅</div>
+                  <h3 className="text-2xl font-extrabold mb-2">Mesajınız İletildi!</h3>
+                  <p className="opacity-80">En kısa sürede sizi arayacağız.</p>
+                </div>
+              ) : (
+                <form onSubmit={submitContact} className="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm space-y-4">
+                  <h3 className="text-xl font-extrabold text-gray-900 mb-2">Mesaj Gönderin</h3>
+                  <input
+                    type="text"
+                    placeholder="Adınız Soyadınız"
+                    required
+                    value={contactForm.name}
+                    onChange={e => setContactForm(f => ({ ...f, name: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 transition-colors"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Telefon Numaranız"
+                    required
+                    value={contactForm.phone}
+                    onChange={e => setContactForm(f => ({ ...f, phone: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 transition-colors"
+                  />
+                  <textarea
+                    placeholder="Mesajınız (opsiyonel)"
+                    rows={3}
+                    value={contactForm.message}
+                    onChange={e => setContactForm(f => ({ ...f, message: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 transition-colors resize-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={contactLoading}
+                    className="w-full py-3.5 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90 disabled:opacity-60"
+                    style={{ background: theme.primary }}
+                  >
+                    {contactLoading ? 'Gönderiliyor...' : 'Mesaj Gönder →'}
+                  </button>
+                </form>
               )}
             </motion.div>
           </motion.div>
         </div>
+      </section>
+
+      {/* Google Maps */}
+      <section className="h-72 w-full">
+        <iframe
+          src={`https://maps.google.com/maps?q=${encodeURIComponent((displayName + ' ' + (lead.city || '')).trim())}&output=embed&hl=tr`}
+          className="w-full h-full border-0"
+          loading="lazy"
+          title="Konum"
+        />
       </section>
 
       {/* Yapılan İyileştirmeler */}
@@ -1120,6 +1171,7 @@ export default function DemoPage() {
               { icon: 'doc', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
               { icon: 'lock', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
               { icon: 'smartphone', title: 'Mobil Uyumlu Tasarım', desc: 'Her cihazda mükemmel görünüm' },
+              { icon: 'globe', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
             ].map((item, i) => (
               <motion.div key={i} variants={fadeUp} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
