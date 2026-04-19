@@ -39,11 +39,11 @@ function SvcIcon({ name, className, style }: { name: string; className?: string;
 // Sektöre göre Unsplash CDN fotoğrafları — API key gerekmez
 const SECTOR_PHOTOS: Record<string, { hero: string; services: string }> = {
   dis_klinigi: {
-    hero: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&q=85',
-    services: 'https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=1200&q=80',
+    hero: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1600&q=85',
+    services: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=80',
   },
   restoran: {
-    hero: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=85',
+    hero: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&q=85',
     services: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80',
   },
   avukat: {
@@ -84,6 +84,136 @@ const DEFAULT_PHOTO = {
   hero: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85',
   services: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&q=80',
 }
+
+// Domain URL'ini okunabilir firma adına çevir
+function cleanBusinessName(name: string): string {
+  if (!name) return name
+  if (!name.includes('.') || name.includes(' ')) return name
+  return name
+    .replace(/^https?:\/\//, '')
+    .replace(/\/$/, '')
+    .split('.')[0]
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
+}
+
+// Sektöre göre sayısal istatistikler
+const SECTOR_STATS: Record<string, { value: string; label: string }[]> = {
+  dis_klinigi: [
+    { value: '5.000+', label: 'Mutlu Hasta' },
+    { value: '10+', label: 'Yıl Deneyim' },
+    { value: '15+', label: 'Hizmet Çeşidi' },
+    { value: '%100', label: 'Memnuniyet' },
+  ],
+  restoran: [
+    { value: '200+', label: 'Menü Çeşidi' },
+    { value: '1.000+', label: 'Mutlu Misafir' },
+    { value: '10+', label: 'Yıl Deneyim' },
+    { value: '7/24', label: 'Rezervasyon' },
+  ],
+  avukat: [
+    { value: '500+', label: 'Başarılı Dava' },
+    { value: '20+', label: 'Yıl Deneyim' },
+    { value: '%98', label: 'Müvekkil Memnuniyeti' },
+    { value: '7/24', label: 'Ulaşılabilirlik' },
+  ],
+  guzellik_salonu: [
+    { value: '3.000+', label: 'Mutlu Müşteri' },
+    { value: '8+', label: 'Yıl Deneyim' },
+    { value: '50+', label: 'Hizmet Çeşidi' },
+    { value: '%100', label: 'Memnuniyet' },
+  ],
+  insaat: [
+    { value: '200+', label: 'Tamamlanan Proje' },
+    { value: '15+', label: 'Yıl Deneyim' },
+    { value: '50+', label: 'Uzman Ekip' },
+    { value: '%100', label: 'Zamanında Teslimat' },
+  ],
+  oto_galeri: [
+    { value: '1.000+', label: 'Satılan Araç' },
+    { value: '12+', label: 'Yıl Deneyim' },
+    { value: '500+', label: 'Mevcut Araç' },
+    { value: '%100', label: 'Güvenilir Ekspertiz' },
+  ],
+  otel: [
+    { value: '10.000+', label: 'Mutlu Misafir' },
+    { value: '15+', label: 'Yıl Deneyim' },
+    { value: '50+', label: 'Oda Kapasitesi' },
+    { value: '4.8★', label: 'Google Puanı' },
+  ],
+  veteriner: [
+    { value: '8.000+', label: 'Tedavi Edilen Hayvan' },
+    { value: '10+', label: 'Yıl Deneyim' },
+    { value: '7/24', label: 'Acil Servis' },
+    { value: '%100', label: 'Özen ve Sevgi' },
+  ],
+  muhasebe: [
+    { value: '300+', label: 'Aktif Müşteri' },
+    { value: '15+', label: 'Yıl Deneyim' },
+    { value: '%100', label: 'Zamanında Beyan' },
+    { value: '7/24', label: 'Destek' },
+  ],
+  saglik: [
+    { value: '20.000+', label: 'Mutlu Hasta' },
+    { value: '15+', label: 'Uzman Doktor' },
+    { value: '20+', label: 'Yıl Deneyim' },
+    { value: '7/24', label: 'Acil Servis' },
+  ],
+}
+
+const DEFAULT_STATS = [
+  { value: '1.000+', label: 'Mutlu Müşteri' },
+  { value: '10+', label: 'Yıl Deneyim' },
+  { value: '%100', label: 'Memnuniyet' },
+  { value: '7/24', label: 'Destek' },
+]
+
+// Sektöre göre SSS
+const SECTOR_FAQ: Record<string, { q: string; a: string }[]> = {
+  dis_klinigi: [
+    { q: 'İmplant tedavisi ağrılı mı?', a: 'Lokal anestezi ile gerçekleştirilen implant tedavisi tamamen ağrısız bir süreçtir. İşlem sonrasında hafif bir rahatsızlık hissedilebilir, ancak bu durum reçete edilen ağrı kesicilerle kolayca kontrol altına alınabilir.' },
+    { q: 'Diş beyazlatma kalıcı mı?', a: 'Diş beyazlatma işleminin etkisi kişinin ağız hijyenine ve beslenme alışkanlıklarına bağlı olarak 1-3 yıl arasında sürebilir. Düzenli kontroller ve doğru bakımla bu süre uzatılabilir.' },
+    { q: 'Randevu için ne kadar beklerim?', a: 'Online randevu sistemimiz sayesinde genellikle aynı gün veya ertesi gün randevu alabilirsiniz. Acil durumlarda öncelikli muayene imkânı sunuyoruz.' },
+    { q: 'Çocuklar için diş tedavisi yapıyor musunuz?', a: 'Evet, çocuk hastalara özel yaklaşımımız ve çocuk diş hekimi kadromuzla tüm yaş gruplarına hizmet veriyoruz.' },
+    { q: 'Sigorta kabul ediyor musunuz?', a: 'SGK ve özel sigorta anlaşmalarımız hakkında bilgi almak için kliniğimizi arayabilirsiniz.' },
+  ],
+  restoran: [
+    { q: 'Rezervasyon zorunlu mu?', a: 'Rezervasyon zorunlu değil, ancak özellikle hafta sonları ve özel günlerde önceden rezervasyon yaptırmanızı öneririz.' },
+    { q: 'Vejetaryen/vegan seçenek var mı?', a: 'Evet, menümüzde çeşitli vejetaryen ve vegan seçenekler mevcuttur. Özel diyet gereksinimleriniz için mutfağımızı önceden bilgilendirebilirsiniz.' },
+    { q: 'Organizasyon düzenliyor musunuz?', a: 'Düğün, nişan, doğum günü ve kurumsal etkinlikler için özel organizasyon hizmetimiz mevcuttur. Detaylı bilgi için iletişime geçin.' },
+    { q: 'Paket servis yapıyor musunuz?', a: 'Evet, bölgemize paket servis hizmetimiz bulunmaktadır. Minimum sipariş tutarı için lütfen bizi arayın.' },
+    { q: 'Çocuklar için özel menü var mı?', a: 'Küçük misafirlerimiz için özel çocuk menümüz mevcuttur.' },
+  ],
+  avukat: [
+    { q: 'İlk danışma ücretli mi?', a: 'İlk 30 dakikalık danışma ücretsizdir. Davanızın kapsamını değerlendirdikten sonra size net bir ücret teklifi sunarız.' },
+    { q: 'Dava süreçleri ne kadar sürer?', a: 'Dava türüne ve mahkeme süreçlerine göre değişmekle birlikte, sizi düzenli olarak bilgilendiriyor ve süreci hızlandırmak için aktif çalışıyoruz.' },
+    { q: 'Online danışma yapabiliyor musunuz?', a: 'Evet, video konferans veya telefon aracılığıyla online danışma hizmeti sunuyoruz.' },
+    { q: 'Hangi hukuk alanlarında hizmet veriyorsunuz?', a: 'Ceza hukuku, aile hukuku, gayrimenkul, iş hukuku, şirket hukuku ve trafik hukuku başta olmak üzere birçok alanda hizmet veriyoruz.' },
+    { q: 'Vekâletname nasıl düzenlenir?', a: 'Vekâletname için notere gitmeniz gerekmektedir. Gerekli belgeler ve süreç hakkında sizi önceden bilgilendiririz.' },
+  ],
+  guzellik_salonu: [
+    { q: 'Randevu almadan gelebilir miyim?', a: 'Randevusuz gelen müşterilerimize de hizmet vermeye çalışıyoruz, ancak bekleme süresi olabilir. Randevu ile öncelikli hizmet alırsınız.' },
+    { q: 'Hangi saç boyası markalarını kullanıyorsunuz?', a: 'Uluslararası sertifikalı, saç dostu premium marka boyalar kullanıyoruz. Sağlığınız bizim için önceliklidir.' },
+    { q: 'Gelin paketi ne içeriyor?', a: 'Gelin paketimiz; saç tasarımı, makyaj, manikür ve pedikür hizmetlerini kapsamaktadır. Deneme seansı da dahildir.' },
+    { q: 'Erkekler için de hizmet veriyor musunuz?', a: 'Evet, erkek saç kesimi ve bakım hizmetlerimiz de mevcuttur.' },
+    { q: 'Fiyat listesi var mı?', a: 'Güncel fiyat listemiz için lütfen bizi arayın veya WhatsApp üzerinden ulaşın.' },
+  ],
+  insaat: [
+    { q: 'Proje teslim süreleri nasıl belirlenir?', a: 'Proje büyüklüğü ve kapsamına göre sözleşmede belirlenen teslim tarihleri garanti altına alınmaktadır.' },
+    { q: 'Malzeme garantisi veriyor musunuz?', a: 'Evet, kullandığımız tüm malzemeler için tedarikçi garantisi ve işçilik garantisi sunuyoruz.' },
+    { q: 'Ruhsat işlemlerini siz mi yapıyorsunuz?', a: 'İnşaat ruhsatı ve gerekli izin süreçlerinde size tam destek sağlıyoruz.' },
+    { q: 'Tadilat için minimum bütçe nedir?', a: 'Tadilat projenizin kapsamına göre değişmektedir. Ücretsiz keşif için bizi arayabilirsiniz.' },
+    { q: 'İstanbul dışında hizmet veriyor musunuz?', a: 'Türkiye genelinde proje kabul ediyoruz. Detaylar için iletişime geçin.' },
+  ],
+}
+
+const DEFAULT_FAQ = [
+  { q: 'Hizmetleriniz hakkında bilgi alabilir miyim?', a: 'Tüm hizmetlerimiz hakkında detaylı bilgi almak için bizi arayabilir veya WhatsApp üzerinden ulaşabilirsiniz.' },
+  { q: 'Çalışma saatleriniz nedir?', a: 'Pazartesi-Cuma 09:00-18:00, Cumartesi 09:00-14:00 saatleri arasında hizmet veriyoruz.' },
+  { q: 'Randevu almak gerekiyor mu?', a: 'Randevu almanızı tavsiye ederiz, ancak müsaitlik durumuna göre randevusuz da hizmet alabilirsiniz.' },
+  { q: 'Ödeme seçenekleriniz nelerdir?', a: 'Nakit, kredi kartı ve banka kartı ile ödeme kabul ediyoruz.' },
+]
 
 interface DemoData {
   lead: {
@@ -430,6 +560,10 @@ export default function DemoPage() {
   const sector = lead.sector || 'genel'
   const theme = SECTOR_THEMES[sector] || DEFAULT_THEME
   const photos = SECTOR_PHOTOS[sector] || DEFAULT_PHOTO
+  const displayName = cleanBusinessName(lead.name)
+  const stats = SECTOR_STATS[sector] || DEFAULT_STATS
+  const faq = SECTOR_FAQ[sector] || DEFAULT_FAQ
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   // Gerçek fotoğraf varsa (gallery_images) onu kullan, yoksa Unsplash
   const heroBg = analysis.gallery_images?.[0] || photos.hero
@@ -500,9 +634,9 @@ export default function DemoPage() {
               className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg ${analysis.logo_url ? 'hidden' : ''}`}
               style={{ background: theme.primary }}
             >
-              {lead.name.charAt(0).toUpperCase()}
+              {displayName.charAt(0).toUpperCase()}
             </div>
-            <span className="font-bold text-gray-900 text-lg hidden sm:block">{lead.name}</span>
+            <span className="font-bold text-gray-900 text-lg hidden sm:block">{displayName}</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
@@ -549,7 +683,7 @@ export default function DemoPage() {
               {analysis.founding_year ? ` • ${analysis.founding_year}'den beri` : ''}
             </p>
             <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-tight tracking-tight">
-              {lead.name}
+              {displayName}
             </h1>
             <p className="text-xl md:text-2xl font-semibold opacity-90 mb-3">
               {theme.heroTitle}
@@ -603,6 +737,26 @@ export default function DemoPage() {
             <div className="w-1 h-2 bg-white/60 rounded-full" />
           </div>
         </motion.div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-16 px-6 bg-white border-b border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
+            {stats.map((s, i) => (
+              <motion.div key={i} variants={fadeUp}>
+                <div className="text-4xl font-extrabold mb-1" style={{ color: theme.primary }}>{s.value}</div>
+                <div className="text-sm text-gray-500 font-medium">{s.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* Hizmetler */}
@@ -667,7 +821,7 @@ export default function DemoPage() {
                 <span className="text-xs font-bold uppercase tracking-widest mb-4 block" style={{ color: theme.primary }}>
                   Hakkımızda
                 </span>
-                <h2 className="text-3xl font-extrabold text-gray-900 mb-5 tracking-tight">{lead.name}</h2>
+                <h2 className="text-3xl font-extrabold text-gray-900 mb-5 tracking-tight">{displayName}</h2>
                 <p className="text-gray-600 leading-relaxed text-lg">{analysis.about_text}</p>
                 {analysis.founding_year && (
                   <p className="mt-5 text-sm font-bold" style={{ color: theme.primary }}>
@@ -679,7 +833,7 @@ export default function DemoPage() {
                 className="w-40 h-40 rounded-3xl flex items-center justify-center text-white text-6xl font-extrabold flex-shrink-0 shadow-xl"
                 style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.primary}99)` }}
               >
-                {lead.name.charAt(0)}
+                {displayName.charAt(0)}
               </div>
             </motion.div>
           </div>
@@ -829,6 +983,32 @@ export default function DemoPage() {
         </section>
       )}
 
+      {/* SSS */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <motion.div className="text-center mb-12" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+            <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: theme.primary }}>Merak Edilenler</span>
+            <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Sıkça Sorulan Sorular</h2>
+          </motion.div>
+          <motion.div className="space-y-3" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+            {faq.map((item, i) => (
+              <motion.div key={i} variants={fadeUp} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  <span>{item.q}</span>
+                  <span className="ml-4 flex-shrink-0 text-xl" style={{ color: theme.primary }}>{openFaq === i ? '−' : '+'}</span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">{item.a}</div>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* İletişim */}
       <section id="iletisim" className="py-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
@@ -939,8 +1119,7 @@ export default function DemoPage() {
               { icon: 'chat', title: 'WhatsApp Entegrasyonu', desc: 'Müşteriler tek tuşla ulaşabilir' },
               { icon: 'doc', title: 'İletişim Formu', desc: 'Gelen mesajlar anında size iletilir' },
               { icon: 'lock', title: 'SSL Güvenlik', desc: 'Ziyaretçileriniz güvende hisseder' },
-              { icon: 'chart', title: 'Google Analytics', desc: 'Ziyaretçi takibi ve raporlama' },
-              { icon: 'globe', title: 'Google Maps Entegrasyonu', desc: 'Adresiniz kolayca bulunur' },
+              { icon: 'smartphone', title: 'Mobil Uyumlu Tasarım', desc: 'Her cihazda mükemmel görünüm' },
             ].map((item, i) => (
               <motion.div key={i} variants={fadeUp} className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -980,7 +1159,7 @@ export default function DemoPage() {
       <footer className="bg-gray-900 text-gray-400 py-8 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <p className="font-bold text-white">{lead.name}</p>
+            <p className="font-bold text-white">{displayName}</p>
             <p className="text-sm mt-1">{address}</p>
           </div>
           {phone && (
@@ -1006,6 +1185,19 @@ export default function DemoPage() {
           {priceSent ? '✓ Talebiniz Alındı' : '💡 Ücretsiz Teklif Al'}
         </button>
       </div>
+      {/* WhatsApp Floating Button */}
+      {phone && (
+        <a
+          href={`https://wa.me/90${phone.replace(/\D/g, '')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-20 right-4 z-50 bg-green-500 hover:bg-green-400 text-white p-4 rounded-full shadow-xl transition-all hover:scale-110"
+          title="WhatsApp ile ulaşın"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </a>
+      )}
+
       <div className="h-16" />
     </div>
   )
